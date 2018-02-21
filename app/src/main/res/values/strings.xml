@@ -33,4 +33,8 @@
     <string name="goods">Товары:</string>
     <string name="menu_label">Меню:</string>
     <string name="title_activity_checkout">CheckoutActivity</string>
+    <string name="cancel_order">Отменить заказ</string>
+    <string name="approve_order">Подтвердить заказ</string>
+    <string name="button_plus">+</string>
+    <string name="button_minus">-</string>
 </resources>

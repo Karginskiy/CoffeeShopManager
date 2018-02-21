@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutSoldListItemViewModel" />
+    </data>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:weightSum="10"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="@{viewModel.toString()}" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="@{viewModel.price}" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="@{viewModel.count}" />
+
+            <Button
+                android:id="@+id/plus_button"
+                android:layout_weight="1.5"
+                android:layout_width="0dp"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/button_plus"
+                android:textSize="22sp"
+                android:tag="good_button"/>
+
+            <Button
+                android:id="@+id/minus_button"
+                android:layout_weight="1.5"
+                android:layout_width="0dp"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/button_minus"
+                android:textSize="22sp"
+                android:tag="good_button"/>
+        </TableRow>
+    </TableLayout>
+</layout>

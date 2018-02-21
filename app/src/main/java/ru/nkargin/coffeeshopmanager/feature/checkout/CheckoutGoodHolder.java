@@ -7,6 +7,7 @@ import android.view.View;
 import ru.nkargin.coffeeshopmanager.databinding.GoodBinding;
 import ru.nkargin.coffeeshopmanager.feature.admin.GoodViewHolder;
 import ru.nkargin.coffeeshopmanager.model.Good;
+import ru.nkargin.coffeeshopmanager.service.OrderService;
 
 class CheckoutGoodHolder extends GoodViewHolder {
     public CheckoutGoodHolder(Activity activity, GoodBinding binding) {
@@ -15,7 +16,12 @@ class CheckoutGoodHolder extends GoodViewHolder {
 
     @NonNull
     @Override
-    protected View.OnClickListener addOnItemClickListener(Good good) {
-        return super.addOnItemClickListener(good);
+    protected View.OnClickListener addOnItemClickListener(final Good good) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OrderService.INSTANCE.getCurrentOrder().addItem(good);
+            }
+        };
     }
 }

@@ -28,6 +28,10 @@ public class GoodViewHolder extends RecyclerView.ViewHolder {
         binding.executePendingBindings();
     }
 
+    protected GoodBinding getBinding() {
+        return this.binding;
+    }
+
     @NonNull
     protected View.OnClickListener addOnItemClickListener(final Good good) {
         return new View.OnClickListener() {

@@ -8,11 +8,16 @@ public class OrderService {
 
     private OrderService() {}
 
-    public IncompleteShopOrder startOrder() {
+    public IncompleteShopOrder startOrderOrGetOpened() {
         if (incompleteShopOrder == null) {
-            return new IncompleteShopOrder();
+            incompleteShopOrder = new IncompleteShopOrder();
         }
         return incompleteShopOrder;
+    }
+
+    public void approveAndCloseOrder() {
+        incompleteShopOrder.persist();
+        incompleteShopOrder = null;
     }
 
     public void cancelOrder() {

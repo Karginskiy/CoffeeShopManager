@@ -11,15 +11,7 @@ public class SoldItem extends SugarRecord<SoldItem> {
     private int count;
     private ShopOrder shopOrder;
 
-    public static SoldItem forGood(Good good) {
-        SoldItem soldItem = new SoldItem();
-        soldItem.setGood(good);
-
-        return soldItem;
-    }
-
-    public SoldItem() {
-    }
+    public SoldItem() {}
 
     public int getCount() {
         return count;
