@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">CoffeeShopManager</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="book_items">Оформить заказ</string>
+    <string name="close_session">Закрыть операционный день</string>
+    <string name="orders_sum">Сумма по заказам: </string>
+    <string name="cups_left">Остаток стаканов:</string>
+    <string name="paid_prox">Заработок:</string>
+    <string name="admin_panel_button_label">Панель администратора</string>
+    <string name="stats_button_label">Статистика</string>
+    <string name="title_activity_admin">Admin</string>
+    <string name="add_positions">Добавить позиции для торговли</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="good_title">Название товара: </string>
+    <string name="good_price">Стоимость товара:</string>
+    <string name="save_position_button">Сохранить</string>
+    <string name="edit_formula">Редактировать формулу расчета зарплаты</string>
+    <string name="edit_consumables">Редактировать расходники</string>
+    <string name="goods">Товары:</string>
+    <string name="menu_label">Меню:</string>
+</resources>

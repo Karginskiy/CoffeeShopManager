@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ru.nkargin.coffeeshopmanager.feature.admin.AdminViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/good_item"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_marginBottom="3dp"
+            android:gravity="center"
+            android:text="@{viewModel.toString()}"
+            android:tag="good_button"/>
+    </FrameLayout>
+</layout>
