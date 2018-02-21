@@ -18,7 +18,7 @@
     <string name="close_session">Закрыть операционный день</string>
     <string name="orders_sum">Сумма по заказам: </string>
     <string name="cups_left">Остаток стаканов:</string>
-    <string name="paid_prox">Заработок:</string>
+    <string name="paid_prox">Прибыль:</string>
     <string name="admin_panel_button_label">Панель администратора</string>
     <string name="stats_button_label">Статистика</string>
     <string name="title_activity_admin">Admin</string>
@@ -38,4 +38,7 @@
     <string name="button_plus">+</string>
     <string name="button_minus">-</string>
     <string name="spending_text_label">Расходы:</string>
+    <string name="confirm_session_close_alert_title">Подтверждение закрытия операционного дня</string>
+    <string name="confirm_close_session_button">Закрыть</string>
+    <string name="confirm_close_session_cancel_button">Отмена</string>
 </resources>
