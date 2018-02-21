@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import ru.nkargin.coffeeshopmanager.service.SessionService;
+import ru.nkargin.coffeeshopmanager.service.StatisticsService;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -63,21 +65,23 @@ public class IncompleteShopOrder {
         if (!unsavedSoldItems.isEmpty()) {
 
             shopOrder = new ShopOrder();
+            shopOrder.setExecutionTime(new Date());
+            shopOrder.setSessionId(SessionService.getInstance().getCurrentSession().getId());
+            shopOrder.save();
 
             for (Map.Entry<Good, Integer> goodIntegerEntry : unsavedSoldItems.entrySet()) {
                 SoldItem soldItem = new SoldItem();
                 soldItem.setGood(goodIntegerEntry.getKey());
-                soldItem.setShopOrder(shopOrder);
+                soldItem.setShopOrder(shopOrder.getId());
                 soldItem.setCount(goodIntegerEntry.getValue());
 
                 soldItem.save();
             }
         }
 
-        shopOrder.setExecutionTime(new Date());
-        shopOrder.save();
-
         soldItemsSubject.onCompleted();
+
+        StatisticsService.INSTANCE.updateStatistics();
 
         return shopOrder;
     }

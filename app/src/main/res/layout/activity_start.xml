@@ -66,10 +66,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cups_left" />
+                android:text="@string/spending_text_label" />
 
             <EditText
-                android:id="@+id/cups_left"
+                android:id="@+id/spending_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,7 +97,7 @@
                 android:text="@string/paid_prox" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/payment_text"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"

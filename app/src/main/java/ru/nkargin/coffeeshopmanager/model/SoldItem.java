@@ -9,7 +9,7 @@ public class SoldItem extends SugarRecord<SoldItem> {
 
     private Good good;
     private int count;
-    private ShopOrder shopOrder;
+    private long shopOrderId;
 
     public SoldItem() {}
 
@@ -29,12 +29,12 @@ public class SoldItem extends SugarRecord<SoldItem> {
         this.good = good;
     }
 
-    public ShopOrder getShopOrder() {
-        return shopOrder;
+    public long getShopOrder() {
+        return shopOrderId;
     }
 
-    public void setShopOrder(ShopOrder shopOrder) {
-        this.shopOrder = shopOrder;
+    public void setShopOrder(long shopOrderId) {
+        this.shopOrderId = shopOrderId;
     }
 
     @Override

@@ -37,4 +37,5 @@
     <string name="approve_order">Подтвердить заказ</string>
     <string name="button_plus">+</string>
     <string name="button_minus">-</string>
+    <string name="spending_text_label">Расходы:</string>
 </resources>

@@ -55,4 +55,8 @@ public class SessionService {
         return currentUser;
     }
 
+    public void closeCurrentSession() {
+        StatisticsService.INSTANCE.dispose();
+    }
+
 }
