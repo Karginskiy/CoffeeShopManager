@@ -148,7 +148,7 @@
             android:weightSum="1">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/checkout_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_width="wrap_content"

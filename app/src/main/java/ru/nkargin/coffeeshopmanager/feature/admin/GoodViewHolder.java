@@ -9,7 +9,7 @@ import ru.nkargin.coffeeshopmanager.databinding.GoodBinding;
 import ru.nkargin.coffeeshopmanager.model.Good;
 
 
-class GoodViewHolder extends RecyclerView.ViewHolder {
+public class GoodViewHolder extends RecyclerView.ViewHolder {
 
     private Activity activity;
     private GoodBinding binding;
@@ -29,7 +29,7 @@ class GoodViewHolder extends RecyclerView.ViewHolder {
     }
 
     @NonNull
-    private View.OnClickListener addOnItemClickListener(final Good good) {
+    protected View.OnClickListener addOnItemClickListener(final Good good) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {

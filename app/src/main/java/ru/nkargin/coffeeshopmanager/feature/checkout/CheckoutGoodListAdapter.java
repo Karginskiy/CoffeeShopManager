@@ -1,4 +1,4 @@
-package ru.nkargin.coffeeshopmanager.feature.admin;
+package ru.nkargin.coffeeshopmanager.feature.checkout;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
@@ -15,12 +15,12 @@ import ru.nkargin.coffeeshopmanager.service.GoodService;
 import rx.functions.Action1;
 
 
-class GoodListAdapter extends RecyclerView.Adapter<GoodViewHolder> {
+public class CheckoutGoodListAdapter extends RecyclerView.Adapter<CheckoutGoodHolder> {
 
     private final Activity activity;
     private List<Good> goodList;
 
-    public GoodListAdapter(Activity activity) {
+    public CheckoutGoodListAdapter(Activity activity) {
         this.activity = activity;
         GoodService.INSTANCE.observeGoods().subscribe(new Action1<List<Good>>() {
             @Override
@@ -32,14 +32,14 @@ class GoodListAdapter extends RecyclerView.Adapter<GoodViewHolder> {
     }
 
     @Override
-    public GoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CheckoutGoodHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(activity);
         GoodBinding binding = DataBindingUtil.inflate(inflater, R.layout.good, parent, false);
-        return new GoodViewHolder(activity, binding);
+        return new CheckoutGoodHolder(activity, binding);
     }
 
     @Override
-    public void onBindViewHolder(GoodViewHolder holder, int position) {
+    public void onBindViewHolder(CheckoutGoodHolder holder, int position) {
         holder.bind(goodList.get(position));
     }
 
