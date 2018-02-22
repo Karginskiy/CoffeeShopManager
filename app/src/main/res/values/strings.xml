@@ -41,4 +41,12 @@
     <string name="confirm_session_close_alert_title">Подтверждение закрытия операционного дня</string>
     <string name="confirm_close_session_button">Закрыть</string>
     <string name="confirm_close_session_cancel_button">Отмена</string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_stats_periods">Сводная статистика</string>
+    <string name="title_stats_free_time">Статистика по датам</string>
+    <string name="choose_date_stats">Выбрать дату для подсчета статистики</string>
+    <string name="date_picker_from">От</string>
+    <string name="date_picker_to">До</string>
+    <string name="date_from_label">Дата от:</string>
+    <string name="date_to_label">Дата до:</string>
 </resources>

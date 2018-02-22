@@ -69,6 +69,8 @@ public class IncompleteShopOrder {
             shopOrder.setSessionId(SessionService.getInstance().getCurrentSession().getId());
             shopOrder.save();
 
+            int orderSummary = 0;
+
             for (Map.Entry<Good, Integer> goodIntegerEntry : unsavedSoldItems.entrySet()) {
                 SoldItem soldItem = new SoldItem();
                 soldItem.setGood(goodIntegerEntry.getKey());
@@ -76,9 +78,14 @@ public class IncompleteShopOrder {
                 soldItem.setCount(goodIntegerEntry.getValue());
 
                 soldItem.save();
+
+                orderSummary += goodIntegerEntry.getKey().getPrice() * goodIntegerEntry.getValue();
             }
+
+            shopOrder.setSummary(orderSummary);
         }
 
+        shopOrder.save();
         soldItemsSubject.onCompleted();
 
         StatisticsService.INSTANCE.updateStatistics();

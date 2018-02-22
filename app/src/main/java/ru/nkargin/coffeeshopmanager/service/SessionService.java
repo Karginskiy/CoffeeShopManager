@@ -6,8 +6,8 @@ import com.orm.query.Select;
 import java.util.Date;
 
 import ru.nkargin.coffeeshopmanager.model.Session;
+import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.model.User;
-import rx.Subscription;
 import rx.functions.Action1;
 
 
@@ -17,7 +17,6 @@ public class SessionService {
     private static Session currentSession;
     private static User currentUser;
     private boolean hasChanges;
-    private static Subscription orderChangingSubscription;
 
     public static SessionService getInstance() {
         if (INSTANCE == null) {
@@ -28,10 +27,10 @@ public class SessionService {
     }
 
     private static void getSubscriptionOnOrderActivity() {
-        orderChangingSubscription = StatisticsService.INSTANCE.observeOrdersSummaryForCurrentSession().first().subscribe(new Action1<Integer>() {
+        StatisticsService.INSTANCE.observeStatisticsForCurrentSession().first().subscribe(new Action1<StatisticTO>() {
             @Override
-            public void call(Integer integer) {
-                INSTANCE.hasChanges = integer > 0;
+            public void call(StatisticTO statisticTO) {
+                INSTANCE.hasChanges = true;
             }
         });
     }

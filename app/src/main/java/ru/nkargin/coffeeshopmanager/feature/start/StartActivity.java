@@ -15,6 +15,8 @@ import android.widget.TextView;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.feature.admin.AdminActivity;
 import ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutActivity;
+import ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity;
+import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
 import rx.functions.Action1;
@@ -25,9 +27,10 @@ public class StartActivity extends AppCompatActivity {
     private TextView helloText;
     private Button checkoutButton;
     private Button adminButton;
-    private EditText paymentEditText;
+    private EditText profitEditText;
     private EditText spendingEditText;
     private Button closeSessionButton;
+    private Button statisticsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,55 +39,67 @@ public class StartActivity extends AppCompatActivity {
 
         bindFields();
 
-        subscribeOnOrdersSummary();
-        subscribeOnPayment();
-        subscribeOnSpending();
+        subscribeOnStatistics();
     }
 
-    private void subscribeOnSpending() {
-        StatisticsService.INSTANCE.observeSpendingForCurrentSession().subscribe(new Action1<Integer>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void call(Integer integer) {
-                spendingEditText.setText(String.valueOf(integer) + " руб.");
-            }
-        });
+    private void subscribeOnStatistics() {
+        StatisticsService.INSTANCE
+                .observeStatisticsForCurrentSession()
+                .subscribe(subscribeOnCurrentSessionStatistics());
     }
 
-    private void subscribeOnPayment() {
-        StatisticsService.INSTANCE.observePaymentForCurrentSession().subscribe(new Action1<Integer>() {
+    @NonNull
+    private Action1<StatisticTO> subscribeOnCurrentSessionStatistics() {
+        return new Action1<StatisticTO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void call(Integer integer) {
-                paymentEditText.setText(String.valueOf(integer) + " руб.");
+            public void call(StatisticTO statisticTO) {
+                ordersSumEditText.setText(String.valueOf(statisticTO.getOrderSummary()) + " руб.");
+                spendingEditText.setText(String.valueOf(statisticTO.getSpending()) + " руб.");
+                profitEditText.setText(String.valueOf(statisticTO.getProfit()) + " руб.");
             }
-        });
-    }
-
-    private void subscribeOnOrdersSummary() {
-        StatisticsService.INSTANCE.observeOrdersSummaryForCurrentSession().subscribe(new Action1<Integer>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void call(Integer integer) {
-                ordersSumEditText.setText(String.valueOf(integer) + " руб.");
-            }
-        });
+        };
     }
 
     private void bindFields() {
+        initButtons();
+        initTotals();
+        initHelloTextArea();
+    }
+
+    private void initHelloTextArea() {
+        helloText = findViewById(R.id.hello_message);
+        helloText.setText(String.format("Привет, %s!", SessionService.getInstance().getCurrentUser().getRealName()));
+    }
+
+    private void initButtons() {
         checkoutButton = findViewById(R.id.checkout_button);
         checkoutButton.setOnClickListener(getCheckoutButtonClickListener());
 
-        spendingEditText = findViewById(R.id.spending_edit_text);
-        ordersSumEditText = findViewById(R.id.orders_sum);
-        paymentEditText = findViewById(R.id.payment_text);
+        statisticsButton = findViewById(R.id.statistics_button);
+        statisticsButton.setOnClickListener(getStatisticsButtonOnClickListener());
+
         closeSessionButton = findViewById(R.id.close_session_button);
         closeSessionButton.setOnClickListener(getCloseSessionButtonClickListener());
-        helloText = findViewById(R.id.hello_message);
-        helloText.setText(String.format("Привет, %s!", SessionService.getInstance().getCurrentUser().getRealName()));
 
         adminButton = findViewById(R.id.admin_panel);
         adminButton.setOnClickListener(getOnAdminButtonClickListener());
+    }
+
+    private void initTotals() {
+        spendingEditText = findViewById(R.id.spending_edit_text);
+        ordersSumEditText = findViewById(R.id.orders_sum);
+        profitEditText = findViewById(R.id.payment_text);
+    }
+
+    @NonNull
+    private View.OnClickListener getStatisticsButtonOnClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StartActivity.this, StatisticsActivity.class));
+            }
+        };
     }
 
     @NonNull

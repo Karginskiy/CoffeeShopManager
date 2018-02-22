@@ -10,6 +10,15 @@ public class ShopOrder extends SugarRecord<ShopOrder> {
 
     private Date executionTime;
     private long sessionId;
+    private int summary;
+
+    public int getSummary() {
+        return summary;
+    }
+
+    public void setSummary(int summary) {
+        this.summary = summary;
+    }
 
     public long getSessionId() {
         return sessionId;
