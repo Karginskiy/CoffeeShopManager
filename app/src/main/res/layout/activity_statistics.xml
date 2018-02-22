@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity">
+    tools:context="ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity"
+    android:layout_height="match_parent">
 
     <TableLayout
         android:id="@+id/statistics_layout"
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

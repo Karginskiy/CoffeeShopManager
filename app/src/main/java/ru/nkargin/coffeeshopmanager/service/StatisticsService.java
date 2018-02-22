@@ -20,49 +20,33 @@ import rx.subjects.BehaviorSubject;
 public class StatisticsService {
 
     public static final StatisticsService INSTANCE = new StatisticsService();
-    private static final String EXECUTION_TIME = "execution_time";
 
-    private BehaviorSubject<List<ShopOrder>> currentSessionOrdersSubject = BehaviorSubject.create();
-    private BehaviorSubject<Pair<Calendar, Calendar>> betweenDatesSubject = BehaviorSubject.create();
+    private BehaviorSubject<Boolean> updateSubject = BehaviorSubject.create(true);
 
-    private List<ShopOrder> getOrdersForCurrentSession() {
-        return Select.from(ShopOrder.class)
-                .where(Condition.prop("session_id").eq(SessionService
-                        .getInstance()
-                        .getCurrentSession()
-                        .getId()))
-                .list();
-    }
-
-    public void changeDatesForStatistics(final Pair<Calendar, Calendar> dates) {
-        betweenDatesSubject.onNext(dates);
-    }
-
-    public Observable<StatisticTO> observeStatisticsForDatesBetween() {
-        return betweenDatesSubject.asObservable()
-                .map(mapPeriodOnSessions())
-                .map(mapSessionsOnOrders())
+    public Observable<StatisticTO> observeStatisticsForDatesBetween(final Pair<Calendar, Calendar> dates) {
+        return updateSubject.asObservable().map(mapUpdateTickToSession(dates))
+                .map(mapToOrders())
                 .map(mapOrdersOnSummary())
                 .map(mapSummaryOnStatistics());
     }
 
     @NonNull
-    private Func1<Pair<Calendar, Calendar>, List<Session>> mapPeriodOnSessions() {
-        return new Func1<Pair<Calendar, Calendar>, List<Session>>() {
+    private Func1<Boolean, List<Session>> mapUpdateTickToSession(final Pair<Calendar, Calendar> dates) {
+        return new Func1<Boolean, List<Session>>() {
             @Override
-            public List<Session> call(Pair<Calendar, Calendar> fromToPeriod) {
+            public List<Session> call(Boolean aBoolean) {
                 return Select.from(Session.class)
                         .where(Condition.prop("start_date")
-                                .gt(fromToPeriod.first.getTime().getTime()))
+                                .gt(dates.first.getTime().getTime()))
                         .and(Condition.prop("start_date")
-                                .lt(fromToPeriod.second.getTime().getTime()))
+                                .lt(dates.second.getTime().getTime()))
                         .list();
             }
         };
     }
 
     @NonNull
-    private Func1<List<Session>, List<ShopOrder>> mapSessionsOnOrders() {
+    private Func1<List<Session>, List<ShopOrder>> mapToOrders() {
         return new Func1<List<Session>, List<ShopOrder>>() {
             @Override
             public List<ShopOrder> call(List<Session> sessions) {
@@ -93,13 +77,28 @@ public class StatisticsService {
     }
 
     public void updateStatistics() {
-        currentSessionOrdersSubject.onNext(getOrdersForCurrentSession());
+        updateSubject.onNext(true);
     }
 
     public Observable<StatisticTO> observeStatisticsForCurrentSession() {
-        return currentSessionOrdersSubject.asObservable()
+        return updateSubject.asObservable().map(mapUpdateTickOnOrdersForCurrentSession())
                 .map(mapOrdersOnSummary())
                 .map(mapSummaryOnStatistics());
+    }
+
+    @NonNull
+    private Func1<Boolean, List<ShopOrder>> mapUpdateTickOnOrdersForCurrentSession() {
+        return new Func1<Boolean, List<ShopOrder>>() {
+            @Override
+            public List<ShopOrder> call(Boolean aBoolean) {
+                return Select.from(ShopOrder.class)
+                        .where(Condition.prop("session_id").eq(SessionService
+                                .getInstance()
+                                .getCurrentSession()
+                                .getId()))
+                        .list();
+            }
+        };
     }
 
     @NonNull

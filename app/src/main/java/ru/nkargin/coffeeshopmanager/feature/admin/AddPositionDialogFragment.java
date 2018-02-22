@@ -7,6 +7,11 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+
+import java.util.Objects;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.FragmentAddPositionDialogBinding;
@@ -33,9 +38,28 @@ public class AddPositionDialogFragment extends DialogFragment {
         final FragmentAddPositionDialogBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_add_position_dialog, container, false);
         binding.setModel(good);
+
+        if (good == null) {
+            updateRemoveButtonVisibility(binding);
+        }
+
+        binding.deletePositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoodService.INSTANCE.remove(good);
+            }
+        });
         updateValues(binding);
         binding.savePositionButton.setOnClickListener(getOnSaveHandler(binding));
         return binding.getRoot();
+    }
+
+    private void updateRemoveButtonVisibility(FragmentAddPositionDialogBinding binding) {
+        ViewParent parent = binding.deletePositionButton.getParent();
+        ((ViewGroup) parent).removeView(binding.deletePositionButton);
+        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams();
+        layoutParams.weight = 3;
+        binding.savePositionButton.setLayoutParams(layoutParams);
     }
 
     private void updateValues(FragmentAddPositionDialogBinding binding) {
@@ -51,14 +75,19 @@ public class AddPositionDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String title = binding.editTitle.getText().toString();
-                int price = Integer.valueOf(binding.editPrice.getText().toString());
+
+                int price = 0;
+                if (!binding.editPrice.getText().toString().equals("")) {
+                    price = Integer.valueOf(binding.editPrice.getText().toString());
+                }
                 if (good == null) {
                     good = new Good();
                 }
+
                 good.setTitle(title);
                 good.setPrice(price);
-                GoodService.INSTANCE.save(good);
 
+                GoodService.INSTANCE.save(good);
                 getDialog().dismiss();
             }
         };

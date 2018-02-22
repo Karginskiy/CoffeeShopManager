@@ -13,7 +13,17 @@ public class Good extends SugarRecord<Good> {
     private String title;
     private int price;
 
+    private long soldTimes;
+
     public Good() {}
+
+    public long getSoldTimes() {
+        return soldTimes;
+    }
+
+    public void setSoldTimes(long soldTimes) {
+        this.soldTimes = soldTimes;
+    }
 
     public String getTitle() {
         return title;

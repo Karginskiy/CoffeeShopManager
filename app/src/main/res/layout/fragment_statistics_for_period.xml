@@ -87,29 +87,26 @@
 
         <TableRow
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:weightSum="1"
+            android:weightSum="2"
             >
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_width="0dp"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:text="@string/orders_sum" />
 
             <EditText
                 android:id="@+id/orders_sum"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_width="0dp"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:ems="10"
                 android:inputType="textPersonName"
                 android:textAlignment="center" />
         </TableRow>
@@ -117,23 +114,22 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:weightSum="1"
+            android:weightSum="2"
             >
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:layout_weight="1"
                 android:text="@string/spending_text_label" />
 
             <EditText
                 android:id="@+id/spending"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_width="0dp"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
@@ -145,15 +141,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:weightSum="1"
+            android:weightSum="2"
             >
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:layout_weight="1"
                 android:text="@string/paid_prox" />
 
@@ -162,7 +157,7 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"

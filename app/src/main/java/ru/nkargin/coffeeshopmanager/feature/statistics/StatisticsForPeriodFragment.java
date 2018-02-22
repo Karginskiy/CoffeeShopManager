@@ -23,6 +23,7 @@ import java.util.Locale;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
+import rx.Subscription;
 import rx.functions.Action1;
 
 public class StatisticsForPeriodFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
@@ -39,6 +40,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     private EditText spending;
     private EditText profit;
     private DatePickerDialog dpd;
+    private Subscription onPeriodSubscription;
 
     public StatisticsForPeriodFragment() {}
 
@@ -54,7 +56,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
 
         Pair<Calendar, Calendar> datesFromPreferences = getDatesFromPreferences();
 
-        subscribeOnPeriodStatistics(datesFromPreferences);
+        resubscribeOnPeriodStatistics(datesFromPreferences);
         updateDateFields(datesFromPreferences);
 
         return inflate;
@@ -107,9 +109,13 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
         dateTo.setText(standardFormat.format(datesFromPreferences.second.getTime()));
     }
 
-    private void subscribeOnPeriodStatistics(Pair<Calendar, Calendar> datesFromPreferences) {
-        StatisticsService.INSTANCE.observeStatisticsForDatesBetween().subscribe(subscribeOnPeriodStatistics());
-        StatisticsService.INSTANCE.changeDatesForStatistics(datesFromPreferences);
+    private void resubscribeOnPeriodStatistics(Pair<Calendar, Calendar> datesFromPreferences) {
+        if (onPeriodSubscription != null) {
+            onPeriodSubscription.unsubscribe();
+        }
+        onPeriodSubscription = StatisticsService.INSTANCE
+                .observeStatisticsForDatesBetween(datesFromPreferences)
+                .subscribe(subscribeOnPeriodStatistics());
     }
 
     @NonNull
@@ -146,7 +152,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
         setDatesToPreferences(dateTo, DATE_TO);
         this.dateTo.setText(standardFormat.format(dateTo.getTime()));
 
-        StatisticsService.INSTANCE.changeDatesForStatistics(Pair.create(dateFrom, dateTo));
+        resubscribeOnPeriodStatistics(Pair.create(dateFrom, dateTo));
     }
 
     private Pair<Calendar, Calendar> getDatesFromPreferences() {

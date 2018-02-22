@@ -6,7 +6,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import ru.nkargin.coffeeshopmanager.R;
 
@@ -21,15 +20,16 @@ public class StatisticsActivity extends AppCompatActivity {
             Fragment selectedFragment = StatisticsForPeriodFragment.getInstance();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    break;
                 case R.id.navigation_dashboard:
+                    selectedFragment = StatisticsForRecentPeriodFragment.getInstance();
+                    break;
             }
 
             setFragment(selectedFragment);
             return true;
         }
     };
-
-    private Button chooseDatesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

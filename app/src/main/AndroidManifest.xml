@@ -18,7 +18,7 @@
             android:value="example.db" />
         <meta-data
             android:name="VERSION"
-            android:value="15" />
+            android:value="16" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -49,6 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".feature.statistics.StatisticsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_statistics" />
     </application>
 

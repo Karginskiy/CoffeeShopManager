@@ -64,12 +64,6 @@ public class StartActivity extends AppCompatActivity {
     private void bindFields() {
         initButtons();
         initTotals();
-        initHelloTextArea();
-    }
-
-    private void initHelloTextArea() {
-        helloText = findViewById(R.id.hello_message);
-        helloText.setText(String.format("Привет, %s!", SessionService.getInstance().getCurrentUser().getRealName()));
     }
 
     private void initButtons() {

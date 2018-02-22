@@ -2,11 +2,15 @@ package ru.nkargin.coffeeshopmanager.feature.checkout;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.GoodBinding;
@@ -25,10 +29,27 @@ public class CheckoutGoodListAdapter extends RecyclerView.Adapter<CheckoutGoodHo
         GoodService.INSTANCE.observeGoods().subscribe(new Action1<List<Good>>() {
             @Override
             public void call(List<Good> goods) {
+                Collections.sort(goods, getGoodsComparator());
                 goodList = goods;
                 notifyDataSetChanged();
             }
         });
+    }
+
+    @NonNull
+    private Comparator<Good> getGoodsComparator() {
+        return new Comparator<Good>() {
+            @Override
+            public int compare(Good good, Good t1) {
+                String firstTitle = good.getTitle();
+                String secondTitle = t1.getTitle();
+                long firstSells = good.getSoldTimes();
+                long secondSells = t1.getSoldTimes();
+
+                int compare = Long.compare(secondSells, firstSells);
+                return compare == 0 ? firstTitle.compareTo(secondTitle) : compare;
+            }
+        };
     }
 
     @Override

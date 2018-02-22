@@ -21,7 +21,6 @@ public class SessionService {
     public static SessionService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new SessionService();
-            getSubscriptionOnOrderActivity();
         }
         return INSTANCE;
     }
@@ -47,6 +46,7 @@ public class SessionService {
             }
         }
         currentUser = user;
+        getSubscriptionOnOrderActivity();
         StatisticsService.INSTANCE.updateStatistics();
     }
 

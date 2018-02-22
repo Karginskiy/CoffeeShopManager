@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import ru.nkargin.coffeeshopmanager.service.GoodService;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
 import rx.Observable;
@@ -72,14 +73,12 @@ public class IncompleteShopOrder {
             int orderSummary = 0;
 
             for (Map.Entry<Good, Integer> goodIntegerEntry : unsavedSoldItems.entrySet()) {
-                SoldItem soldItem = new SoldItem();
-                soldItem.setGood(goodIntegerEntry.getKey());
-                soldItem.setShopOrder(shopOrder.getId());
-                soldItem.setCount(goodIntegerEntry.getValue());
+                Good good = goodIntegerEntry.getKey();
+                Integer count = goodIntegerEntry.getValue();
+                good.setSoldTimes(good.getSoldTimes() + count);
+                orderSummary += good.getPrice() * count;
 
-                soldItem.save();
-
-                orderSummary += goodIntegerEntry.getKey().getPrice() * goodIntegerEntry.getValue();
+                GoodService.INSTANCE.save(good);
             }
 
             shopOrder.setSummary(orderSummary);

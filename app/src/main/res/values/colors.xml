@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+    <!--<color name="colorPrimary">#d69f7e</color>-->
+    <!--<color name="colorPrimaryDark">#774936</color>-->
+    <!--<color name="colorAccent">#ddae7e</color>-->
+<!--</resources>-->
+
+
+<!--<resources>-->
+    <!--<color name="colorPrimary">#ffc4a8</color>-->
+    <!--<color name="colorPrimaryDark">#ffabab</color>-->
+    <!--<color name="colorAccent">#ff9580</color>-->
+<!--</resources>-->
+    <!---->
+    <!---->
+
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff7040</color>
+    <color name="colorPrimary">#d69f7e</color>
+    <color name="colorPrimaryDark">#774936</color>
+    <color name="colorAccent">#d69f7e</color>
 </resources>
+
+<!--
+<resources>
+    <color name="colorPrimary">#d69f7e</color>
+    <color name="colorPrimaryDark">#3c0000</color>
+    <color name="colorAccent">#774936</color>
+</resources>
+-->
+
+<!--
+<resources>
+    <color name="colorPrimary">#ddae7e</color>
+    <color name="colorPrimaryDark">#774936</color>
+    <color name="colorAccent">#d69f7e</color>
+</resources>
+-->

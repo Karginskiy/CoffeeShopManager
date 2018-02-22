@@ -28,6 +28,12 @@ public class GoodService {
         goodsSubject.onNext(goodsCache);
     }
 
+    public void remove(Good good) {
+        good.delete();
+        goodsCache.remove(good);
+        goodsSubject.onNext(goodsCache);
+    }
+
     public Observable<List<Good>> observeGoods() {
         return goodsSubject.asObservable();
     }

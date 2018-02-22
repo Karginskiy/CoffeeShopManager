@@ -49,4 +49,9 @@
     <string name="date_picker_to">До</string>
     <string name="date_from_label">Дата от:</string>
     <string name="date_to_label">Дата до:</string>
+    <string name="delete_position_button_label">Удалить</string>
+    <string name="stats_label">Статистика за текущий день: </string>
+    <string name="week_summary_label">Сумма по заказам за неделю</string>
+    <string name="yearly_stats_label">Статистика по заказам за последний год:</string>
+    <string name="monthly_stats_label">Статистика по заказам за месяц:</string>
 </resources>
