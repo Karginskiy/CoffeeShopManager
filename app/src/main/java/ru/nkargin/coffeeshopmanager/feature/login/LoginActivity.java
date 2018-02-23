@@ -297,7 +297,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             User userByName = UserService.INSTANCE.getUserByName(mEmail);
             if (userByName != null) {
                 if (userByName.getPassword().equals(mPassword)) {
-                    SessionService.getInstance().startSessionOrRetrieve(userByName);
+                    SessionService.getInstance().setCurrentUser(userByName);
                     return true;
                 }
             }

@@ -2,6 +2,7 @@ package ru.nkargin.coffeeshopmanager.feature.checkout;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,16 +10,20 @@ import android.view.View;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.ActivityCheckoutBinding;
+import ru.nkargin.coffeeshopmanager.model.IncompleteShopOrder;
 import ru.nkargin.coffeeshopmanager.service.OrderService;
+import rx.functions.Action1;
 
 import static ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutRxUtils.getOnTotalsHandler;
 
 public class CheckoutActivity extends AppCompatActivity {
 
+    private ActivityCheckoutBinding checkoutBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityCheckoutBinding checkoutBinding = DataBindingUtil.setContentView(this, R.layout.activity_checkout);
+        checkoutBinding = DataBindingUtil.setContentView(this, R.layout.activity_checkout);
         checkoutBinding.setViewModel(new CheckoutTotalsViewModel());
 
         addOrderButtonsClickListeners(checkoutBinding);
@@ -52,11 +57,22 @@ public class CheckoutActivity extends AppCompatActivity {
         });
     }
 
-    private void initOrder(ActivityCheckoutBinding checkoutBinding) {
-        OrderService.INSTANCE
-                .startOrderOrGetOpened()
-                .observeSummary()
-                .subscribe(getOnTotalsHandler(checkoutBinding));
+    private void initOrder(final ActivityCheckoutBinding checkoutBinding) {
+        IncompleteShopOrder incompleteShopOrder = OrderService.INSTANCE
+                .startOrderOrGetOpened();
+
+        incompleteShopOrder.observeSummary().subscribe(getOnTotalsHandler(checkoutBinding));
+        incompleteShopOrder.observeIsValidOrder().subscribe(subscribeOnOrderValidity(checkoutBinding));
+    }
+
+    @NonNull
+    private Action1<Boolean> subscribeOnOrderValidity(final ActivityCheckoutBinding checkoutBinding) {
+        return new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                checkoutBinding.approveOrderButton.setEnabled(aBoolean);
+            }
+        };
     }
 
     private void initSoldItemsRecycler() {

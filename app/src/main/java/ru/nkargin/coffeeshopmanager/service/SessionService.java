@@ -14,8 +14,9 @@ import rx.functions.Action1;
 public class SessionService {
 
     private static SessionService INSTANCE;
-    private static Session currentSession;
     private static User currentUser;
+
+    private Session currentSession;
     private boolean hasChanges;
 
     public static SessionService getInstance() {
@@ -32,6 +33,10 @@ public class SessionService {
                 INSTANCE.hasChanges = true;
             }
         });
+    }
+
+    public void setCurrentUser(User currentUser) {
+        SessionService.currentUser = currentUser;
     }
 
     public Session getCurrentSession() {

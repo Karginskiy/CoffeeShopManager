@@ -14,6 +14,7 @@ import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.feature.admin.AdminActivity;
 import ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity;
 import ru.nkargin.coffeeshopmanager.feature.trade.TradeSessionActivity;
+import ru.nkargin.coffeeshopmanager.service.SessionService;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class StartActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SessionService.getInstance().startSessionOrRetrieve(SessionService.getInstance().getCurrentUser());
                 startActivity(new Intent(StartActivity.this, TradeSessionActivity.class));
             }
         };

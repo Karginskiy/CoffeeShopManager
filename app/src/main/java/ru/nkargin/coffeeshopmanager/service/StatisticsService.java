@@ -17,6 +17,10 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
 
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.SECOND;
+
 public class StatisticsService {
 
     public static final StatisticsService INSTANCE = new StatisticsService();
@@ -35,6 +39,8 @@ public class StatisticsService {
         return new Func1<Boolean, List<Session>>() {
             @Override
             public List<Session> call(Boolean aBoolean) {
+                setFromToDayMinimum(dates);
+                setToToDayMaximum(dates);
                 return Select.from(Session.class)
                         .where(Condition.prop("start_date")
                                 .gt(dates.first.getTime().getTime()))
@@ -43,6 +49,20 @@ public class StatisticsService {
                         .list();
             }
         };
+    }
+
+    private void setToToDayMaximum(Pair<Calendar, Calendar> dates) {
+        dates.second.set(HOUR_OF_DAY, dates.first.getActualMaximum(HOUR_OF_DAY));
+        dates.second.set(MINUTE, dates.first.getActualMaximum(MINUTE));
+        dates.second.set(SECOND, dates.first.getActualMaximum(SECOND));
+        dates.second.set(Calendar.MILLISECOND, dates.first.getActualMaximum(SECOND));
+    }
+
+    private void setFromToDayMinimum(Pair<Calendar, Calendar> dates) {
+        dates.first.set(HOUR_OF_DAY, dates.first.getActualMinimum(HOUR_OF_DAY));
+        dates.first.set(MINUTE, dates.first.getActualMinimum(MINUTE));
+        dates.first.set(SECOND, dates.first.getActualMinimum(SECOND));
+        dates.first.set(Calendar.MILLISECOND, dates.first.getActualMinimum(SECOND));
     }
 
     @NonNull

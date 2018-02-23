@@ -33,8 +33,8 @@
     <string name="goods">Товары:</string>
     <string name="menu_label">Меню:</string>
     <string name="title_activity_checkout">CheckoutActivity</string>
-    <string name="cancel_order">Отменить заказ</string>
-    <string name="approve_order">Подтвердить заказ</string>
+    <string name="cancel_order">Отменить</string>
+    <string name="approve_order">Подтвердить</string>
     <string name="button_plus">+</string>
     <string name="button_minus">-</string>
     <string name="spending_text_label">Расходы:</string>
@@ -44,7 +44,7 @@
     <string name="title_activity_statistics">StatisticsActivity</string>
     <string name="title_stats_periods">Сводная статистика</string>
     <string name="title_stats_free_time">Статистика по датам</string>
-    <string name="choose_date_stats">Выбрать дату для подсчета статистики</string>
+    <string name="choose_date_stats">Выбрать даты для расчета</string>
     <string name="date_picker_from">От</string>
     <string name="date_picker_to">До</string>
     <string name="date_from_label">Дата от:</string>
