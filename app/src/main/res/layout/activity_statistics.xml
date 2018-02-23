@@ -7,12 +7,20 @@
     tools:context="ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity"
     android:layout_height="match_parent">
 
-    <TableLayout
-        android:id="@+id/statistics_layout"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="60dp"
         android:layout_height="match_parent">
 
-    </TableLayout>
+        <ScrollView
+            android:id="@+id/statistics_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ScrollView>
+
+    </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

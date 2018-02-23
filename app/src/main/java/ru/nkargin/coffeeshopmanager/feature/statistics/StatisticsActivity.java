@@ -1,6 +1,7 @@
 package ru.nkargin.coffeeshopmanager.feature.statistics;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,13 +12,15 @@ import ru.nkargin.coffeeshopmanager.R;
 
 public class StatisticsActivity extends AppCompatActivity {
 
+    public static final String SELECTED_FRAGMENT_KEY = "selectedFragment";
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            Fragment selectedFragment = StatisticsForPeriodFragment.getInstance();
+            selectedMenuItem = item.getItemId();
+            selectedFragment = StatisticsForPeriodFragment.getInstance();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     break;
@@ -26,10 +29,12 @@ public class StatisticsActivity extends AppCompatActivity {
                     break;
             }
 
-            setFragment(selectedFragment);
+            setFragment();
             return true;
         }
     };
+    private static Fragment selectedFragment;
+    private static int selectedMenuItem = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,24 @@ public class StatisticsActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        setFragment(StatisticsForPeriodFragment.getInstance());
+        if (selectedMenuItem != -1) {
+            navigation.setSelectedItemId(selectedMenuItem);
+        }
+        setFragment();
+    }
+    private void setFragment() {
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(
+                R.id.statistics_layout,
+                selectedFragment == null ? StatisticsForPeriodFragment.getInstance() : selectedFragment
+        );
+        transaction.commit();
     }
 
-    private void setFragment(Fragment fragment) {
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.statistics_layout, fragment);
-        transaction.commit();
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        getSupportFragmentManager().putFragment(outState, SELECTED_FRAGMENT_KEY, selectedFragment);
     }
 }

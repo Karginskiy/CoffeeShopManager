@@ -4,13 +4,180 @@
     android:layout_height="match_parent"
     tools:context="ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsForPeriodFragment">
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_height="match_parent">
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/stats_for_current_day_label"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="35dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="@string/date_from_label"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="@string/date_to_label"
+                    android:textAlignment="center" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/date_from"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="date"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/date_to"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="date"
+                    android:textAlignment="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/orders_sum"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/orders_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/spending_text_label"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/spending"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/paid_prox"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/profit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TableRow
             android:layout_width="match_parent"
@@ -19,153 +186,12 @@
 
             <Button
                 android:id="@+id/choose_dates_button"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:text="@string/choose_date_stats" />
         </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_marginTop="35dp"
-            android:weightSum="2"
-            android:layout_height="match_parent" >
-
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:textAlignment="center"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_height="wrap_content"
-                android:text="@string/date_from_label"
-                android:ems="10" />
-
-            <TextView
-                android:layout_weight="1"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_width="0dp"
-                android:textAlignment="center"
-                android:layout_height="wrap_content"
-                android:text="@string/date_to_label"
-                android:ems="10" />
-        </TableRow>
-
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:layout_height="match_parent" >
-
-            <EditText
-                android:id="@+id/date_from"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:textAlignment="center"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="date" />
-
-            <EditText
-                android:id="@+id/date_to"
-                android:layout_weight="1"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_width="0dp"
-                android:textAlignment="center"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="date"
-                />
-        </TableRow>
-
-        <TableRow
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            >
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:text="@string/orders_sum" />
-
-            <EditText
-                android:id="@+id/orders_sum"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_weight="1"
-                android:text="@string/spending_text_label" />
-
-            <EditText
-                android:id="@+id/spending"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_weight="1"
-                android:text="@string/paid_prox" />
-
-            <EditText
-                android:id="@+id/profit"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-        </TableRow>
-
-
 
     </TableLayout>
 
