@@ -35,6 +35,7 @@ import java.util.List;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.feature.start.StartActivity;
+import ru.nkargin.coffeeshopmanager.feature.trade.TradeSessionActivity;
 import ru.nkargin.coffeeshopmanager.model.User;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 import ru.nkargin.coffeeshopmanager.service.UserService;

@@ -56,4 +56,5 @@
     <string name="yearly_stats_label">Последний год:</string>
     <string name="monthly_stats_label">Последний месяц:</string>
     <string name="stats_for_current_day_label">Статистика за текущий день:</string>
+    <string name="start_session">Начать операционный день</string>
 </resources>

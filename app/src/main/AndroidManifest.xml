@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.start.StartActivity"
+            android:name=".feature.trade.TradeSessionActivity"
             android:label="@string/title_activity_start"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -49,8 +49,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".feature.statistics.StatisticsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_statistics" />
+            android:label="@string/title_activity_statistics"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".feature.start.StartActivity"
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
