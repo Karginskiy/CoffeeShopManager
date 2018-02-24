@@ -69,12 +69,12 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutActivity">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/sold_items_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/sold_items_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                </android.support.v7.widget.RecyclerView>
+                    </android.support.v7.widget.RecyclerView>
 
                 <TableRow
                     android:layout_width="match_parent"

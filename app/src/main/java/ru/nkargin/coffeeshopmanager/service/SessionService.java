@@ -1,14 +1,18 @@
 package ru.nkargin.coffeeshopmanager.service;
 
+import android.support.annotation.NonNull;
+import android.util.Pair;
+
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.model.Session;
 import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.model.User;
-import rx.functions.Action1;
 
 
 public class SessionService {
@@ -27,12 +31,20 @@ public class SessionService {
     }
 
     private static void getSubscriptionOnOrderActivity() {
-        StatisticsService.INSTANCE.observeStatisticsForCurrentSession().first().subscribe(new Action1<StatisticTO>() {
+        StatisticsService.INSTANCE
+                .observeStatisticsForDatesBetween(Pair.create(Calendar.getInstance(), Calendar.getInstance()))
+                .firstElement()
+                .subscribe(onChangesInCurrentSession());
+    }
+
+    @NonNull
+    private static Consumer<StatisticTO> onChangesInCurrentSession() {
+        return new Consumer<StatisticTO>() {
             @Override
-            public void call(StatisticTO statisticTO) {
+            public void accept(StatisticTO statisticTO) {
                 INSTANCE.hasChanges = true;
             }
-        });
+        };
     }
 
     public void setCurrentUser(User currentUser) {
@@ -40,6 +52,9 @@ public class SessionService {
     }
 
     public Session getCurrentSession() {
+        if (currentSession == null && currentUser != null) {
+            currentSession = getStoredSession(currentUser);
+        }
         return currentSession;
     }
 
@@ -65,6 +80,9 @@ public class SessionService {
         session.setStartDate(new Date());
         session.setEndDate(new Date());
         session.setUserId(user.getId());
+
+        session.setPayment(FormulaService.getInstance().getPayment());
+        session.setTax(FormulaService.getInstance().getTax());
 
         session.save();
         return session;

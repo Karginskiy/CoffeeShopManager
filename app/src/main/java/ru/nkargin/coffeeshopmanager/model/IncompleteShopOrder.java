@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.BehaviorSubject;
 import ru.nkargin.coffeeshopmanager.service.GoodService;
+import ru.nkargin.coffeeshopmanager.service.OrderService;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.BehaviorSubject;
 
 import static ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutRxUtils.getItemsTotalAccumulator;
 import static ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutRxUtils.getMapToEntrySet;
@@ -20,7 +21,7 @@ public class IncompleteShopOrder {
 
     private ShopOrder shopOrder;
     private HashMap<Good, Integer> goodsOnSale = new LinkedHashMap<>();
-    private BehaviorSubject<HashMap<Good, Integer>> soldItemsSubject = BehaviorSubject.create(new HashMap<Good, Integer>());
+    private BehaviorSubject<HashMap<Good, Integer>> soldItemsSubject = BehaviorSubject.createDefault(new HashMap<Good, Integer>());
 
     public void addItem(Good good) {
         Integer integer = goodsOnSale.get(good);
@@ -34,10 +35,10 @@ public class IncompleteShopOrder {
     }
 
     public Observable<Boolean> observeIsValidOrder() {
-        return soldItemsSubject.map(new Func1<Map<Good, Integer>, Boolean>() {
+        return soldItemsSubject.map(new Function<HashMap<Good,Integer>, Boolean>() {
             @Override
-            public Boolean call(Map<Good, Integer> goodIntegerMap) {
-                return !goodIntegerMap.isEmpty();
+            public Boolean apply(HashMap<Good, Integer> goodIntegerHashMap) throws Exception {
+                return !goodIntegerHashMap.isEmpty();
             }
         });
     }
@@ -63,7 +64,7 @@ public class IncompleteShopOrder {
     }
 
     public Observable<HashMap<Good, Integer>> observeGoods() {
-        return soldItemsSubject.asObservable();
+        return soldItemsSubject;
     }
 
     public Observable<Integer> observeSummary() {
@@ -96,8 +97,9 @@ public class IncompleteShopOrder {
         shopOrder.setSummary(orderSummary);
 
         shopOrder.save();
-        soldItemsSubject.onCompleted();
+        soldItemsSubject.onComplete();
 
+        OrderService.INSTANCE.updateOrders();
         StatisticsService.INSTANCE.updateStatistics();
     }
 }

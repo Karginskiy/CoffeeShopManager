@@ -2,19 +2,21 @@ package ru.nkargin.coffeeshopmanager.feature.checkout;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.SoldListItemBinding;
 import ru.nkargin.coffeeshopmanager.model.Good;
 import ru.nkargin.coffeeshopmanager.model.IncompleteShopOrder;
-import rx.functions.Action1;
 
 
 class CheckoutSoldItemsAdapter extends RecyclerView.Adapter<CheckoutSoldItemHolder> {
@@ -27,13 +29,18 @@ class CheckoutSoldItemsAdapter extends RecyclerView.Adapter<CheckoutSoldItemHold
         this.activity = activity;
         this.currentOrder = currentOrder;
 
-        currentOrder.observeGoods().subscribe(new Action1<Map<Good, Integer>>() {
+        currentOrder.observeGoods().subscribe(goodsConsumer());
+    }
+
+    @NonNull
+    private Consumer<HashMap<Good, Integer>> goodsConsumer() {
+        return new Consumer<HashMap<Good,Integer>>() {
             @Override
-            public void call(Map<Good, Integer> goodIntegerMap) {
+            public void accept(HashMap<Good, Integer> goodIntegerMap) {
                 soldItems = new ArrayList<>(goodIntegerMap.entrySet());
                 notifyDataSetChanged();
             }
-        });
+        };
     }
 
     @Override

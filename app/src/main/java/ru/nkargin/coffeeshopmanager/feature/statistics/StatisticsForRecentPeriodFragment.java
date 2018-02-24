@@ -10,23 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
-import rx.Subscription;
-import rx.functions.Action1;
 
 public class StatisticsForRecentPeriodFragment extends Fragment {
 
     private static StatisticsForRecentPeriodFragment INSTANCE;
     private EditText spendingWeek;
-    private Subscription weeklySubscription;
+    private Disposable weeklySubscription;
     private EditText profitWeek;
-    private Subscription monthlySubscription;
-    private Subscription yearlySubscription;
+    private Disposable monthlySubscription;
+    private Disposable yearlySubscription;
     private EditText spendingMonth;
     private EditText profitMonth;
     private EditText spendingYear;
@@ -54,11 +55,21 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
         spendingYear = inflate.findViewById(R.id.spending_year);
         profitYear = inflate.findViewById(R.id.profit_year);
 
+        resubscribeOnStatistics();
+
+        return inflate;
+    }
+
+    private void resubscribeOnStatistics() {
         subscribeOnWeekSummariesUpdate();
         subscribeOnMonthSummariesUpdate();
         subscribeOnYearSummariesUpdate();
+    }
 
-        return inflate;
+    @Override
+    public void onResume() {
+        super.onResume();
+        resubscribeOnStatistics();
     }
 
     private void subscribeOnWeekSummariesUpdate() {
@@ -68,7 +79,7 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
         setDayOnStart(from);
 
         if (weeklySubscription != null) {
-            weeklySubscription.unsubscribe();
+            weeklySubscription.dispose();
         }
 
         weeklySubscription = StatisticsService
@@ -84,7 +95,7 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
         setDayOnStart(from);
 
         if (monthlySubscription != null) {
-            monthlySubscription.unsubscribe();
+            monthlySubscription.dispose();
         }
 
         monthlySubscription = StatisticsService
@@ -94,11 +105,11 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     @NonNull
-    private Action1<StatisticTO> updateViewOnMonthDataUpdate() {
-        return new Action1<StatisticTO>() {
+    private Consumer<StatisticTO> updateViewOnMonthDataUpdate() {
+        return new Consumer<StatisticTO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void call(StatisticTO statisticTO) {
+            public void accept(StatisticTO statisticTO) {
                 spendingMonth.setText(String.valueOf(statisticTO.getSpending()) + " руб.");
                 profitMonth.setText(String.valueOf(statisticTO.getProfit())+ " руб.");
             }
@@ -112,7 +123,7 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
         setDayOnStart(from);
 
         if (yearlySubscription != null) {
-            yearlySubscription.unsubscribe();
+            yearlySubscription.dispose();
         }
 
         yearlySubscription = StatisticsService
@@ -122,11 +133,11 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     @NonNull
-    private Action1<StatisticTO> updateViewOnYearlyDataChange() {
-        return new Action1<StatisticTO>() {
+    private Consumer<StatisticTO> updateViewOnYearlyDataChange() {
+        return new Consumer<StatisticTO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void call(StatisticTO statisticTO) {
+            public void accept(StatisticTO statisticTO) {
                 spendingYear.setText(String.valueOf(statisticTO.getSpending()) + " руб.");
                 profitYear.setText(String.valueOf(statisticTO.getProfit())+ " руб.");
             }
@@ -135,11 +146,11 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
 
 
     @NonNull
-    private Action1<StatisticTO> updateViewOnWeekDataUpdate() {
-        return new Action1<StatisticTO>() {
+    private Consumer<StatisticTO> updateViewOnWeekDataUpdate() {
+        return new Consumer<StatisticTO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void call(StatisticTO statisticTO) {
+            public void accept(StatisticTO statisticTO) {
                 spendingWeek.setText(String.valueOf(statisticTO.getSpending()) + " руб.");
                 profitWeek.setText(String.valueOf(statisticTO.getProfit())+ " руб.");
             }

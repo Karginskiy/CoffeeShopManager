@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.GoodBinding;
 import ru.nkargin.coffeeshopmanager.model.Good;
 import ru.nkargin.coffeeshopmanager.service.GoodService;
-import rx.functions.Action1;
 
 
 public class CheckoutGoodListAdapter extends RecyclerView.Adapter<CheckoutGoodHolder> {
@@ -26,14 +25,19 @@ public class CheckoutGoodListAdapter extends RecyclerView.Adapter<CheckoutGoodHo
 
     public CheckoutGoodListAdapter(Activity activity) {
         this.activity = activity;
-        GoodService.INSTANCE.observeGoods().subscribe(new Action1<List<Good>>() {
+        GoodService.INSTANCE.observeGoods().subscribe(onGoodsUpdateConsumer());
+    }
+
+    @NonNull
+    private Consumer<List<Good>> onGoodsUpdateConsumer() {
+        return new Consumer<List<Good>>() {
             @Override
-            public void call(List<Good> goods) {
+            public void accept(List<Good> goods) {
                 Collections.sort(goods, getGoodsComparator());
                 goodList = goods;
                 notifyDataSetChanged();
             }
-        });
+        };
     }
 
     @NonNull

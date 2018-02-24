@@ -8,11 +8,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.ActivityCheckoutBinding;
 import ru.nkargin.coffeeshopmanager.model.IncompleteShopOrder;
 import ru.nkargin.coffeeshopmanager.service.OrderService;
-import rx.functions.Action1;
 
 import static ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutRxUtils.getOnTotalsHandler;
 
@@ -66,10 +66,10 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Action1<Boolean> subscribeOnOrderValidity(final ActivityCheckoutBinding checkoutBinding) {
-        return new Action1<Boolean>() {
+    private Consumer<Boolean> subscribeOnOrderValidity(final ActivityCheckoutBinding checkoutBinding) {
+        return new Consumer<Boolean>() {
             @Override
-            public void call(Boolean aBoolean) {
+            public void accept(Boolean aBoolean) {
                 checkoutBinding.approveOrderButton.setEnabled(aBoolean);
             }
         };

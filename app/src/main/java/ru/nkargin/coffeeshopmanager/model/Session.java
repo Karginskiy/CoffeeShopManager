@@ -7,13 +7,31 @@ import java.util.Date;
 
 public class Session extends SugarRecord<Session> {
 
-    public Session() {
-    }
+    public Session() {}
 
     private long userId;
     private Date startDate;
     private boolean isClosed;
     private Date endDate;
+
+    private int tax;
+    private int payment;
+
+    public int getTax() {
+        return tax;
+    }
+
+    public void setTax(int tax) {
+        this.tax = tax;
+    }
+
+    public int getPayment() {
+        return payment;
+    }
+
+    public void setPayment(int payment) {
+        this.payment = payment;
+    }
 
     public long getUserId() {
         return userId;

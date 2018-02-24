@@ -3,13 +3,12 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_password">Слишком короткий пароль</string>
+    <string name="error_incorrect_password">Неправильный пароль</string>
+    <string name="error_field_required">Это обязательное поле</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
@@ -57,4 +56,13 @@
     <string name="monthly_stats_label">Последний месяц:</string>
     <string name="stats_for_current_day_label">Статистика за текущий день:</string>
     <string name="start_session">Начать операционный день</string>
+    <string name="continue_session">Продолжить операционный день</string>
+    <string name="login_label">Логин</string>
+    <string name="coffee_cup">Coffee Cup</string>
+    <string name="tax_label">Процент к зарплате:</string>
+    <string name="payment_size_label">Размер зарплаты:</string>
+    <string name="not_closed_order_title">Невозможно закрыть операционный день! У вас есть открытый заказ. Пожалуйста закройте или отмените его.</string>
+    <string name="error_title">Ошибка</string>
+    <string name="confirm_label">Принять</string>
+    <string name="closed_orders">Оформленные заказы: </string>
 </resources>

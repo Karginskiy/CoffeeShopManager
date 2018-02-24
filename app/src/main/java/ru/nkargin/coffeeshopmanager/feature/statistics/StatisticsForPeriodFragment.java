@@ -20,11 +20,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.model.StatisticTO;
 import ru.nkargin.coffeeshopmanager.service.StatisticsService;
-import rx.Subscription;
-import rx.functions.Action1;
 
 public class StatisticsForPeriodFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
@@ -40,7 +40,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     private EditText spending;
     private EditText profit;
     private DatePickerDialog dpd;
-    private Subscription onPeriodSubscription;
+    private Disposable onPeriodSubscription;
 
     public StatisticsForPeriodFragment() {}
 
@@ -104,6 +104,12 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
         dpd.setEndTitle(getString(R.string.date_picker_to));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        resubscribeOnPeriodStatistics(getDatesFromPreferences());
+    }
+
     private void updateDateFields(Pair<Calendar, Calendar> datesFromPreferences) {
         dateFrom.setText(standardFormat.format(datesFromPreferences.first.getTime()));
         dateTo.setText(standardFormat.format(datesFromPreferences.second.getTime()));
@@ -111,7 +117,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
 
     private void resubscribeOnPeriodStatistics(Pair<Calendar, Calendar> datesFromPreferences) {
         if (onPeriodSubscription != null) {
-            onPeriodSubscription.unsubscribe();
+            onPeriodSubscription.dispose();
         }
         onPeriodSubscription = StatisticsService.INSTANCE
                 .observeStatisticsForDatesBetween(datesFromPreferences)
@@ -119,11 +125,11 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     }
 
     @NonNull
-    private Action1<StatisticTO> subscribeOnPeriodStatistics() {
-        return new Action1<StatisticTO>() {
+    private Consumer<StatisticTO> subscribeOnPeriodStatistics() {
+        return new Consumer<StatisticTO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void call(StatisticTO statisticTO) {
+            public void accept(StatisticTO statisticTO) {
                 ordersSum.setText(statisticTO.getOrderSummary() + " руб.");
                 spending.setText(statisticTO.getSpending() + " руб.");
                 profit.setText(statisticTO.getProfit() + " руб.");

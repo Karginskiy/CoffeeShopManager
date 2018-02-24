@@ -2,17 +2,18 @@ package ru.nkargin.coffeeshopmanager.feature.admin;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.GoodBinding;
 import ru.nkargin.coffeeshopmanager.model.Good;
 import ru.nkargin.coffeeshopmanager.service.GoodService;
-import rx.functions.Action1;
 
 
 class GoodListAdapter extends RecyclerView.Adapter<GoodViewHolder> {
@@ -22,13 +23,18 @@ class GoodListAdapter extends RecyclerView.Adapter<GoodViewHolder> {
 
     public GoodListAdapter(Activity activity) {
         this.activity = activity;
-        GoodService.INSTANCE.observeGoods().subscribe(new Action1<List<Good>>() {
+        GoodService.INSTANCE.observeGoods().subscribe(onGoodsUpdateConsumer());
+    }
+
+    @NonNull
+    private Consumer<List<Good>> onGoodsUpdateConsumer() {
+        return new Consumer<List<Good>>() {
             @Override
-            public void call(List<Good> goods) {
+            public void accept(List<Good> goods) {
                 goodList = goods;
                 notifyDataSetChanged();
             }
-        });
+        };
     }
 
     @Override

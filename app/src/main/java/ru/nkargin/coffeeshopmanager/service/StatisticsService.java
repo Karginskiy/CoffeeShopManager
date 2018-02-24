@@ -8,14 +8,17 @@ import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.BehaviorSubject;
 import ru.nkargin.coffeeshopmanager.model.Session;
 import ru.nkargin.coffeeshopmanager.model.ShopOrder;
 import ru.nkargin.coffeeshopmanager.model.StatisticTO;
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.BehaviorSubject;
+
 
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
@@ -25,20 +28,20 @@ public class StatisticsService {
 
     public static final StatisticsService INSTANCE = new StatisticsService();
 
-    private BehaviorSubject<Boolean> updateSubject = BehaviorSubject.create(true);
+    private BehaviorSubject<Boolean> updateSubject = BehaviorSubject.createDefault(true);
 
     public Observable<StatisticTO> observeStatisticsForDatesBetween(final Pair<Calendar, Calendar> dates) {
-        return updateSubject.asObservable().map(mapUpdateTickToSession(dates))
+        return updateSubject.map(mapUpdateTickToSession(dates))
                 .map(mapToOrders())
                 .map(mapOrdersOnSummary())
                 .map(mapSummaryOnStatistics());
     }
 
     @NonNull
-    private Func1<Boolean, List<Session>> mapUpdateTickToSession(final Pair<Calendar, Calendar> dates) {
-        return new Func1<Boolean, List<Session>>() {
+    private Function<Boolean, List<Session>> mapUpdateTickToSession(final Pair<Calendar, Calendar> dates) {
+        return new Function<Boolean, List<Session>>() {
             @Override
-            public List<Session> call(Boolean aBoolean) {
+            public List<Session> apply(Boolean aBoolean) {
                 setFromToDayMinimum(dates);
                 setToToDayMaximum(dates);
                 return Select.from(Session.class)
@@ -51,28 +54,14 @@ public class StatisticsService {
         };
     }
 
-    private void setToToDayMaximum(Pair<Calendar, Calendar> dates) {
-        dates.second.set(HOUR_OF_DAY, dates.first.getActualMaximum(HOUR_OF_DAY));
-        dates.second.set(MINUTE, dates.first.getActualMaximum(MINUTE));
-        dates.second.set(SECOND, dates.first.getActualMaximum(SECOND));
-        dates.second.set(Calendar.MILLISECOND, dates.first.getActualMaximum(SECOND));
-    }
-
-    private void setFromToDayMinimum(Pair<Calendar, Calendar> dates) {
-        dates.first.set(HOUR_OF_DAY, dates.first.getActualMinimum(HOUR_OF_DAY));
-        dates.first.set(MINUTE, dates.first.getActualMinimum(MINUTE));
-        dates.first.set(SECOND, dates.first.getActualMinimum(SECOND));
-        dates.first.set(Calendar.MILLISECOND, dates.first.getActualMinimum(SECOND));
-    }
-
     @NonNull
-    private Func1<List<Session>, List<ShopOrder>> mapToOrders() {
-        return new Func1<List<Session>, List<ShopOrder>>() {
+    private Function<List<Session>, Map<Session, List<ShopOrder>>> mapToOrders() {
+        return new Function<List<Session>, Map<Session, List<ShopOrder>>>() {
             @Override
-            public List<ShopOrder> call(List<Session> sessions) {
-                List<ShopOrder> shopOrders = new ArrayList<>();
+            public Map<Session, List<ShopOrder>> apply(List<Session> sessions) {
+                Map<Session, List<ShopOrder>> shopOrders = new HashMap<>();
                 for (Session session : sessions) {
-                    shopOrders.addAll(
+                    shopOrders.put(session,
                             ShopOrder.find(
                                     ShopOrder.class,
                                     "session_id = ?",
@@ -87,10 +76,10 @@ public class StatisticsService {
     }
 
     @NonNull
-    private Func1<Integer, StatisticTO> mapSummaryOnStatistics() {
-        return new Func1<Integer, StatisticTO>() {
+    private Function<Integer, StatisticTO> mapSummaryOnStatistics() {
+        return new Function<Integer, StatisticTO>() {
             @Override
-            public StatisticTO call(Integer summary) {
+            public StatisticTO apply(Integer summary) {
                 return StatisticTO.getFor(summary, getSpendingOfSummary(summary), getPaymentOfSummary(summary));
             }
         };
@@ -100,47 +89,46 @@ public class StatisticsService {
         updateSubject.onNext(true);
     }
 
-    public Observable<StatisticTO> observeStatisticsForCurrentSession() {
-        return updateSubject.asObservable().map(mapUpdateTickOnOrdersForCurrentSession())
-                .map(mapOrdersOnSummary())
-                .map(mapSummaryOnStatistics());
-    }
-
     @NonNull
-    private Func1<Boolean, List<ShopOrder>> mapUpdateTickOnOrdersForCurrentSession() {
-        return new Func1<Boolean, List<ShopOrder>>() {
+    private Function<Map<Session, List<ShopOrder>>, Integer> mapOrdersOnSummary() {
+        return new Function<Map<Session, List<ShopOrder>>, Integer>() {
             @Override
-            public List<ShopOrder> call(Boolean aBoolean) {
-                return Select.from(ShopOrder.class)
-                        .where(Condition.prop("session_id").eq(SessionService
-                                .getInstance()
-                                .getCurrentSession()
-                                .getId()))
-                        .list();
-            }
-        };
-    }
+            public Integer apply(Map<Session, List<ShopOrder>> sessionToOrders) {
+                int resultSummary = 0;
+                for (Map.Entry<Session, List<ShopOrder>> entry : sessionToOrders.entrySet()) {
+                    Session session = entry.getKey();
+                    int ordersSum = 0;
+                    for (ShopOrder shopOrder : entry.getValue()) {
+                        ordersSum += shopOrder.getSummary();
+                    }
 
-    @NonNull
-    private Func1<List<ShopOrder>, Integer> mapOrdersOnSummary() {
-        return new Func1<List<ShopOrder>, Integer>() {
-            @Override
-            public Integer call(List<ShopOrder> shopOrders) {
-                int sum = 0;
-                for (ShopOrder shopOrder : shopOrders) {
-                    sum += shopOrder.getSummary();
+                    resultSummary += ordersSum - (session.getPayment() + ((ordersSum / 100) * 10));
                 }
 
-                return sum;
+                return resultSummary;
             }
         };
     }
 
-    public int getSpendingOfSummary(int summary) {
+    private int getSpendingOfSummary(int summary) {
         return (summary / 100) * 40;
     }
 
-    public int getPaymentOfSummary(int summary) {
+    private int getPaymentOfSummary(int summary) {
         return (summary - ((summary / 100) * 40)) / 2;
+    }
+
+    private void setToToDayMaximum(Pair<Calendar, Calendar> dates) {
+        dates.second.set(HOUR_OF_DAY, dates.first.getActualMaximum(HOUR_OF_DAY));
+        dates.second.set(MINUTE, dates.first.getActualMaximum(MINUTE));
+        dates.second.set(SECOND, dates.first.getActualMaximum(SECOND));
+        dates.second.set(Calendar.MILLISECOND, dates.first.getActualMaximum(SECOND));
+    }
+
+    private void setFromToDayMinimum(Pair<Calendar, Calendar> dates) {
+        dates.first.set(HOUR_OF_DAY, dates.first.getActualMinimum(HOUR_OF_DAY));
+        dates.first.set(MINUTE, dates.first.getActualMinimum(MINUTE));
+        dates.first.set(SECOND, dates.first.getActualMinimum(SECOND));
+        dates.first.set(Calendar.MILLISECOND, dates.first.getActualMinimum(SECOND));
     }
 }

@@ -3,9 +3,9 @@ package ru.nkargin.coffeeshopmanager.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import ru.nkargin.coffeeshopmanager.model.Good;
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 public class GoodService {
 
@@ -13,7 +13,7 @@ public class GoodService {
 
     private List<Good> goodsCache = new ArrayList<>();
 
-    private BehaviorSubject<List<Good>> goodsSubject = BehaviorSubject.create();
+    private BehaviorSubject<List<Good>> goodsSubject = BehaviorSubject.createDefault(goodsCache);
 
     public void save(Good good) {
         good.save();
@@ -35,6 +35,6 @@ public class GoodService {
     }
 
     public Observable<List<Good>> observeGoods() {
-        return goodsSubject.asObservable();
+        return goodsSubject;
     }
 }

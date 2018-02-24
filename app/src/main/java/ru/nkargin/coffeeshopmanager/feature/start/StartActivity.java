@@ -39,6 +39,21 @@ public class StartActivity extends AppCompatActivity {
 
         startSessionButton = findViewById(R.id.start_session_button);
         startSessionButton.setOnClickListener(getOnStartSessionClickButton());
+        updateStartSessionButtonText();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateStartSessionButtonText();
+    }
+
+    private void updateStartSessionButtonText() {
+        if (SessionService.getInstance().getCurrentSession() != null) {
+            startSessionButton.setText(R.string.continue_session);
+        } else {
+            startSessionButton.setText(R.string.start_session);
+        }
     }
 
     @NonNull

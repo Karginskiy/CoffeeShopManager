@@ -1,32 +1,25 @@
 package ru.nkargin.coffeeshopmanager.feature.trade;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import ru.nkargin.coffeeshopmanager.R;
-import ru.nkargin.coffeeshopmanager.feature.admin.AdminActivity;
 import ru.nkargin.coffeeshopmanager.feature.checkout.CheckoutActivity;
-import ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity;
-import ru.nkargin.coffeeshopmanager.model.StatisticTO;
+import ru.nkargin.coffeeshopmanager.service.OrderService;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
-import ru.nkargin.coffeeshopmanager.service.StatisticsService;
-import rx.functions.Action1;
 
 public class TradeSessionActivity extends AppCompatActivity {
 
-    private EditText ordersSumEditText;
     private Button checkoutButton;
-    private EditText profitEditText;
-    private EditText spendingEditText;
     private Button closeSessionButton;
 
     @Override
@@ -34,33 +27,16 @@ public class TradeSessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trade_session_activity);
 
+        RecyclerView closedOrdersRecycler = findViewById(R.id.sold_orders_recycler);
+        closedOrdersRecycler.setLayoutManager(new GridLayoutManager(this, 1));
+        closedOrdersRecycler.setAdapter(new TradeSessionClosedOrdersAdapter(this));
+
         bindFields();
-
-        subscribeOnStatistics();
     }
 
-    private void subscribeOnStatistics() {
-        StatisticsService.INSTANCE
-                .observeStatisticsForCurrentSession()
-                .subscribe(subscribeOnCurrentSessionStatistics());
-    }
-
-    @NonNull
-    private Action1<StatisticTO> subscribeOnCurrentSessionStatistics() {
-        return new Action1<StatisticTO>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void call(StatisticTO statisticTO) {
-                ordersSumEditText.setText(String.valueOf(statisticTO.getOrderSummary()) + " руб.");
-                spendingEditText.setText(String.valueOf(statisticTO.getSpending()) + " руб.");
-                profitEditText.setText(String.valueOf(statisticTO.getProfit()) + " руб.");
-            }
-        };
-    }
 
     private void bindFields() {
         initButtons();
-        initTotals();
     }
 
     private void initButtons() {
@@ -69,13 +45,6 @@ public class TradeSessionActivity extends AppCompatActivity {
 
         closeSessionButton = findViewById(R.id.close_session_button);
         closeSessionButton.setOnClickListener(getCloseSessionButtonClickListener());
-
-    }
-
-    private void initTotals() {
-        spendingEditText = findViewById(R.id.spending_edit_text);
-        ordersSumEditText = findViewById(R.id.orders_sum);
-        profitEditText = findViewById(R.id.payment_text);
     }
 
 
@@ -84,10 +53,19 @@ public class TradeSessionActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(TradeSessionActivity.this)
-                        .setTitle(R.string.confirm_session_close_alert_title)
-                        .setNegativeButton(R.string.confirm_close_session_cancel_button, getOnAlertCancelClickListener())
-                        .setPositiveButton(R.string.confirm_close_session_button, getOnAlertApproveClickListener()).show();
+                if (OrderService.INSTANCE.getCurrentOrder() == null) {
+                    new AlertDialog.Builder(TradeSessionActivity.this)
+                            .setTitle(R.string.confirm_session_close_alert_title)
+                            .setNegativeButton(R.string.confirm_close_session_cancel_button, getOnAlertCancelClickListener())
+                            .setPositiveButton(R.string.confirm_close_session_button, getOnAlertApproveClickListener()).show();
+
+                } else {
+                    new AlertDialog.Builder(TradeSessionActivity.this)
+                            .setMessage(R.string.not_closed_order_title)
+                            .setTitle(R.string.error_title)
+                            .setPositiveButton(R.string.confirm_label, getOnAlertCancelClickListener())
+                            .show();
+                }
             }
         };
     }

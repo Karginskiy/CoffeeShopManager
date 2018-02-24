@@ -2,13 +2,14 @@ package ru.nkargin.coffeeshopmanager.model;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Created by hei on 20.02.2018.
  */
 
-public class Good extends SugarRecord<Good> {
+public class Good extends SugarRecord<Good> implements Serializable {
 
     private String title;
     private int price;
