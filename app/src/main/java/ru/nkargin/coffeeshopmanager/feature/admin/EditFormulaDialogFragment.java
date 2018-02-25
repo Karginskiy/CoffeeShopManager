@@ -78,7 +78,7 @@ public class EditFormulaDialogFragment extends DialogFragment {
         int tax = Integer.parseInt(s1);
         FormulaService.getInstance().setTaxParam(tax);
 
-        SessionService.getInstance().getCurrentSession().setPayment(tax);
+        SessionService.getInstance().getCurrentSession().setTax(tax);
         SessionService.getInstance().getCurrentSession().save();
     }
 
