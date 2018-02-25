@@ -70,7 +70,7 @@ public class AddPositionDialogFragment extends DialogFragment {
         return new Function<CharSequence, Boolean>() {
             @Override
             public Boolean apply(CharSequence charSequence) throws Exception {
-                return charSequence != null && charSequence.toString().matches("[0-9A-Za-z]+");
+                return charSequence != null && charSequence.toString().matches("[0-9A-Za-zА-Яа-я]+");
             }
         };
     }

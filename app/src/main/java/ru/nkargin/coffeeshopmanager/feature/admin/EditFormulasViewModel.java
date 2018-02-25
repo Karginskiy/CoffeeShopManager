@@ -2,9 +2,6 @@ package ru.nkargin.coffeeshopmanager.feature.admin;
 
 import android.databinding.BaseObservable;
 
-/**
- * Created by hei on 24.02.2018.
- */
 
 public class EditFormulasViewModel extends BaseObservable {
 

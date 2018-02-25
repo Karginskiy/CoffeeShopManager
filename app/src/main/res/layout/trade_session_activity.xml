@@ -18,25 +18,22 @@
             android:layout_width="match_parent"
             android:text="@string/closed_orders"
             android:textAlignment="center"
+            android:textSize="16sp"
             android:layout_height="wrap_content" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
             <View
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="0dp"
+                android:layout_marginBottom="10dp"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"/>
-        </TableRow>
 
         <ScrollView
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginBottom="30dp"
+            android:layout_height="0dp">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/sold_orders_recycler"
                 android:layout_width="match_parent"
@@ -45,48 +42,36 @@
             </android.support.v7.widget.RecyclerView>
         </ScrollView>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_gravity="top"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <Button
+                    android:id="@+id/checkout_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:text="@string/book_items" />
+
+                <Button
+                    android:id="@+id/close_session_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:text="@string/close_session" />
+
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-
-    <TableLayout
-        android:layout_gravity="bottom"
-        android:gravity="bottom"
-        android:layout_marginBottom="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1">
-
-            <Button
-                android:id="@+id/checkout_button"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:text="@string/book_items" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1"
-            >
-
-            <Button
-                android:id="@+id/close_session_button"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:text="@string/close_session" />
-        </TableRow>
-    </TableLayout>
-
 </android.support.design.widget.CoordinatorLayout>

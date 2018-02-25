@@ -35,7 +35,6 @@ import java.util.List;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.feature.start.StartActivity;
-import ru.nkargin.coffeeshopmanager.feature.trade.TradeSessionActivity;
 import ru.nkargin.coffeeshopmanager.model.User;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 import ru.nkargin.coffeeshopmanager.service.UserService;
@@ -57,7 +56,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
 
     static {
-        User userByName = UserService.INSTANCE.getUserByName("admin@admin");
+        initDummyUsers();
+    }
+
+    private static void initDummyUsers() {
+        User userByName = UserService.INSTANCE.getUserByName("admin");
         if (userByName == null) {
             User user = new User();
             user.setAdmin(true);
@@ -67,6 +70,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             user.save();
         }
 
+        User userByName1 = UserService.INSTANCE.getUserByName("user");
+        if (userByName1 == null) {
+            User user = new User();
+            user.setName("user");
+            user.setPassword("user");
+            user.setRealName("Никита");
+            user.save();
+        }
     }
 
     @Override
@@ -192,9 +203,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -219,17 +227,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
@@ -246,9 +249,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {}
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
@@ -289,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             User userByName = UserService.INSTANCE.getUserByName(mEmail);
             if (userByName != null) {
                 if (userByName.getPassword().equals(mPassword)) {
-                    SessionService.getInstance().setCurrentUser(userByName);
+                    SessionService.getInstance().setCurrentUserAndRestoreSession(userByName);
                     return true;
                 }
             }

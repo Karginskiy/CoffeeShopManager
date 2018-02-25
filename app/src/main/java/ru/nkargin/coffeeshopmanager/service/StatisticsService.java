@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import ru.nkargin.coffeeshopmanager.model.Session;
 import ru.nkargin.coffeeshopmanager.model.ShopOrder;
@@ -32,6 +34,7 @@ public class StatisticsService {
 
     public Observable<StatisticTO> observeStatisticsForDatesBetween(final Pair<Calendar, Calendar> dates) {
         return updateSubject.map(mapUpdateTickToSession(dates))
+                .observeOn(Schedulers.computation())
                 .map(mapToOrders())
                 .map(mapOrdersOnSummary())
                 .map(mapSummaryOnStatistics());
@@ -42,8 +45,8 @@ public class StatisticsService {
         return new Function<Boolean, List<Session>>() {
             @Override
             public List<Session> apply(Boolean aBoolean) {
-                setFromToDayMinimum(dates);
-                setToToDayMaximum(dates);
+                ServiceUtils.setDayToMaximum(dates.first);
+                ServiceUtils.setDayToMaximum(dates.second);
                 return Select.from(Session.class)
                         .where(Condition.prop("start_date")
                                 .gt(dates.first.getTime().getTime()))
@@ -102,7 +105,7 @@ public class StatisticsService {
                         ordersSum += shopOrder.getSummary();
                     }
 
-                    resultSummary += ordersSum - (session.getPayment() + ((ordersSum / 100) * 10));
+                    resultSummary += ordersSum - (session.getPayment() + ((ordersSum / 100) * session.getTax()));
                 }
 
                 return resultSummary;
@@ -118,17 +121,4 @@ public class StatisticsService {
         return (summary - ((summary / 100) * 40)) / 2;
     }
 
-    private void setToToDayMaximum(Pair<Calendar, Calendar> dates) {
-        dates.second.set(HOUR_OF_DAY, dates.first.getActualMaximum(HOUR_OF_DAY));
-        dates.second.set(MINUTE, dates.first.getActualMaximum(MINUTE));
-        dates.second.set(SECOND, dates.first.getActualMaximum(SECOND));
-        dates.second.set(Calendar.MILLISECOND, dates.first.getActualMaximum(SECOND));
-    }
-
-    private void setFromToDayMinimum(Pair<Calendar, Calendar> dates) {
-        dates.first.set(HOUR_OF_DAY, dates.first.getActualMinimum(HOUR_OF_DAY));
-        dates.first.set(MINUTE, dates.first.getActualMinimum(MINUTE));
-        dates.first.set(SECOND, dates.first.getActualMinimum(SECOND));
-        dates.first.set(Calendar.MILLISECOND, dates.first.getActualMinimum(SECOND));
-    }
 }

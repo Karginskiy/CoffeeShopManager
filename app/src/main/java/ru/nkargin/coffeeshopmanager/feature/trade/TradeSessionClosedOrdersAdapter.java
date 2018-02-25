@@ -2,6 +2,7 @@ package ru.nkargin.coffeeshopmanager.feature.trade;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -21,20 +22,25 @@ class TradeSessionClosedOrdersAdapter extends RecyclerView.Adapter<TradeSessionS
     private Activity activity;
     private List<ShopOrder> shopOrders = new ArrayList<>();
 
-    public TradeSessionClosedOrdersAdapter(Activity activity) {
+    TradeSessionClosedOrdersAdapter(Activity activity) {
         this.activity = activity;
 
         subscribeOnOrdersForCurrentSession();
     }
 
     private void subscribeOnOrdersForCurrentSession() {
-        OrderService.INSTANCE.observeShopOrdersForCurrentSession().subscribe(new Consumer<List<ShopOrder>>() {
+        OrderService.INSTANCE.observeShopOrdersForCurrentSession().subscribe(onShopOrdersChanged());
+    }
+
+    @NonNull
+    private Consumer<List<ShopOrder>> onShopOrdersChanged() {
+        return new Consumer<List<ShopOrder>>() {
             @Override
             public void accept(List<ShopOrder> shopOrders) throws Exception {
                 TradeSessionClosedOrdersAdapter.this.shopOrders = shopOrders;
                 notifyDataSetChanged();
             }
-        });
+        };
     }
 
     @Override

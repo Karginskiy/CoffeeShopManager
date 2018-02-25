@@ -100,6 +100,10 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
                 savedDates.second.get(Calendar.MONTH),
                 savedDates.second.get(Calendar.DAY_OF_MONTH)
         );
+        updateTitles();
+    }
+
+    private void updateTitles() {
         dpd.setStartTitle(getString(R.string.date_picker_from));
         dpd.setEndTitle(getString(R.string.date_picker_to));
     }
@@ -108,6 +112,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     public void onResume() {
         super.onResume();
         resubscribeOnPeriodStatistics(getDatesFromPreferences());
+        updateTitles();
     }
 
     private void updateDateFields(Pair<Calendar, Calendar> datesFromPreferences) {

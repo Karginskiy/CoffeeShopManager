@@ -1,19 +1,23 @@
 package ru.nkargin.coffeeshopmanager.feature.start;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+
+import java.util.NoSuchElementException;
 
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.feature.admin.AdminActivity;
 import ru.nkargin.coffeeshopmanager.feature.statistics.StatisticsActivity;
 import ru.nkargin.coffeeshopmanager.feature.trade.TradeSessionActivity;
+import ru.nkargin.coffeeshopmanager.model.Session;
 import ru.nkargin.coffeeshopmanager.service.SessionService;
 
 public class StartActivity extends AppCompatActivity {
@@ -21,6 +25,7 @@ public class StartActivity extends AppCompatActivity {
     private Button statisticsButton;
     private Button adminButton;
     private Button startSessionButton;
+    private SessionService sessionService = SessionService.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +37,53 @@ public class StartActivity extends AppCompatActivity {
 
     private void initButtons() {
         statisticsButton = findViewById(R.id.statistics_button);
-        statisticsButton.setOnClickListener(getStatisticsButtonOnClickListener());
-
         adminButton = findViewById(R.id.admin_panel);
-        adminButton.setOnClickListener(getOnAdminButtonClickListener());
 
+        if (sessionService.getCurrentUser().isAdmin()) {
+            addButtonsClickListeners();
+        } else {
+            removeButtonsIfNotAdmin();
+        }
+
+        initStartSessionButton();
+    }
+
+    private void addButtonsClickListeners() {
+        statisticsButton.setOnClickListener(getStatisticsButtonOnClickListener());
+        adminButton.setOnClickListener(getOnAdminButtonClickListener());
+    }
+
+    private void removeButtonsIfNotAdmin() {
+        ViewGroup parent = (ViewGroup) statisticsButton.getParent();
+        parent.removeView(statisticsButton);
+
+        parent = (ViewGroup) adminButton.getParent();
+        parent.removeView(adminButton);
+    }
+
+    private void initStartSessionButton() {
         startSessionButton = findViewById(R.id.start_session_button);
-        startSessionButton.setOnClickListener(getOnStartSessionClickButton());
+        startSessionButton.setOnClickListener(getOnStartSessionHandler());
         updateStartSessionButtonText();
+    }
+
+    @NonNull
+    private void showErrorSessionDialog() {
+        new AlertDialog.Builder(StartActivity.this)
+                .setMessage(R.string.cannot_create_new_session)
+                .setTitle(R.string.error_title)
+                .setPositiveButton(R.string.confirm_label, dismissDialog())
+                .show();
+    }
+
+    @NonNull
+    private DialogInterface.OnClickListener dismissDialog() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        };
     }
 
     @Override
@@ -49,7 +93,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void updateStartSessionButtonText() {
-        if (SessionService.getInstance().getCurrentSession() != null) {
+        if (sessionService.getCurrentSession() != null && !sessionService.getCurrentSession().isClosed()) {
             startSessionButton.setText(R.string.continue_session);
         } else {
             startSessionButton.setText(R.string.start_session);
@@ -57,11 +101,15 @@ public class StartActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private View.OnClickListener getOnStartSessionClickButton() {
+    private View.OnClickListener getOnStartSessionHandler() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SessionService.getInstance().startSessionOrRetrieve(SessionService.getInstance().getCurrentUser());
+                Session session = sessionService.startSessionOrRetrieve(sessionService.getCurrentUser());
+                if (session == null) {
+                    showErrorSessionDialog();
+                    return;
+                }
                 startActivity(new Intent(StartActivity.this, TradeSessionActivity.class));
             }
         };

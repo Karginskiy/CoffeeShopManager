@@ -47,31 +47,43 @@ public class SessionService {
         };
     }
 
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUserAndRestoreSession(User currentUser) {
         SessionService.currentUser = currentUser;
+        currentSession = getStoredSession(currentUser);
     }
 
     public Session getCurrentSession() {
-        if (currentSession == null && currentUser != null) {
-            currentSession = getStoredSession(currentUser);
-        }
         return currentSession;
     }
 
-    public void startSessionOrRetrieve(User user) {
-        if (currentSession == null) {
-            currentSession = getStoredSession(user);
-            if (currentSession == null) {
-                currentSession = createNewSession(user);
-            }
+    public Session startSessionOrRetrieve(User user) {
+        if (currentUser == null || (currentSession != null && currentSession.isClosed())) {
+            return null;
         }
-        currentUser = user;
+
+        currentSession = getStoredSession(user);
+        if (currentSession == null) {
+            currentSession = createNewSession(user);
+        }
+
         getSubscriptionOnOrderActivity();
         StatisticsService.INSTANCE.updateStatistics();
+
+        return currentSession;
     }
 
     private Session getStoredSession(User user) {
-        Select<Session> openedSessions = Select.from(Session.class).where(Condition.prop("user_id").eq(user.getId())).and(Condition.prop("is_closed").eq(0));
+        Calendar todayStart = Calendar.getInstance();
+        Calendar todayEnd = Calendar.getInstance();
+
+        ServiceUtils.setDayToMinimum(todayStart);
+        ServiceUtils.setDayToMaximum(todayEnd);
+
+        Select<Session> openedSessions = Select.from(Session.class)
+                .where(Condition.prop("user_id").eq(user.getId()))
+                .and(Condition.prop("start_date").gt(todayStart.getTime().getTime()))
+                .and(Condition.prop("start_date").lt(todayEnd.getTime().getTime()));
+
         return openedSessions.first();
     }
 
@@ -97,9 +109,8 @@ public class SessionService {
         currentSession.setEndDate(new Date());
         currentSession.save();
 
+        OrderService.INSTANCE.dispose();
         removeSessionIfNoOperability();
-
-        currentSession = null;
     }
 
     private void removeSessionIfNoOperability() {

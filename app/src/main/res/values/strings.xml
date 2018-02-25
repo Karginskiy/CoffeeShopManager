@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">CoffeeShopManager</string>
+    <string name="app_name">Мобильная кофейня</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Пароль</string>
     <string name="action_sign_in">Войти</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_short">Войти</string>
     <string name="error_invalid_password">Слишком короткий пароль</string>
     <string name="error_incorrect_password">Неправильный пароль</string>
     <string name="error_field_required">Это обязательное поле</string>
@@ -65,4 +65,6 @@
     <string name="error_title">Ошибка</string>
     <string name="confirm_label">Принять</string>
     <string name="closed_orders">Оформленные заказы: </string>
+    <string name="cannot_create_new_session">Нельзя открыть более одного операционного дня в течении одних астрономических суток.</string>
+    <string name="close_session_warning">Внимание! До начала новых суток нельзя будет открыть новый операционный день!</string>
 </resources>

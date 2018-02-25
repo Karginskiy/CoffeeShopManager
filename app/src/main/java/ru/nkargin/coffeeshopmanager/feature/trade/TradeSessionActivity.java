@@ -56,6 +56,7 @@ public class TradeSessionActivity extends AppCompatActivity {
                 if (OrderService.INSTANCE.getCurrentOrder() == null) {
                     new AlertDialog.Builder(TradeSessionActivity.this)
                             .setTitle(R.string.confirm_session_close_alert_title)
+                            .setMessage(R.string.close_session_warning)
                             .setNegativeButton(R.string.confirm_close_session_cancel_button, getOnAlertCancelClickListener())
                             .setPositiveButton(R.string.confirm_close_session_button, getOnAlertApproveClickListener()).show();
 

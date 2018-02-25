@@ -29,6 +29,10 @@ public class OrderService {
         });
     }
 
+    public void dispose() {
+        updateSubject.onComplete();
+    }
+
     public void updateOrders() {
         this.updateSubject.onNext(true);
     }
