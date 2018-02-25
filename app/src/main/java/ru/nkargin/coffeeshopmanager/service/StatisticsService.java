@@ -34,7 +34,6 @@ public class StatisticsService {
 
     public Observable<StatisticTO> observeStatisticsForDatesBetween(final Pair<Calendar, Calendar> dates) {
         return updateSubject.map(mapUpdateTickToSession(dates))
-                .observeOn(Schedulers.computation())
                 .map(mapToOrders())
                 .map(mapOrdersOnSummary())
                 .map(mapSummaryOnStatistics());
