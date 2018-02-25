@@ -17,6 +17,7 @@ import io.reactivex.functions.Function;
 import ru.nkargin.coffeeshopmanager.R;
 import ru.nkargin.coffeeshopmanager.databinding.FragmentEditFormulaDialogBinding;
 import ru.nkargin.coffeeshopmanager.service.FormulaService;
+import ru.nkargin.coffeeshopmanager.service.SessionService;
 
 public class EditFormulaDialogFragment extends DialogFragment {
 
@@ -67,12 +68,18 @@ public class EditFormulaDialogFragment extends DialogFragment {
         String s = binding.editPayment.getText().toString();
         int payment = Integer.parseInt(s);
         FormulaService.getInstance().setPaymentParam(payment);
+
+        SessionService.getInstance().getCurrentSession().setPayment(payment);
+        SessionService.getInstance().getCurrentSession().save();
     }
 
     private void updateTax() {
         String s1 = binding.editTax.getText().toString();
         int tax = Integer.parseInt(s1);
         FormulaService.getInstance().setTaxParam(tax);
+
+        SessionService.getInstance().getCurrentSession().setPayment(tax);
+        SessionService.getInstance().getCurrentSession().save();
     }
 
     private void initViewSubscription() {
