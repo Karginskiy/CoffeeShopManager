@@ -45,7 +45,7 @@ public class StatisticsService {
         return new Function<Boolean, List<Session>>() {
             @Override
             public List<Session> apply(Boolean aBoolean) {
-                ServiceUtils.setDayToMaximum(dates.first);
+                ServiceUtils.setDayToMinimum(dates.first);
                 ServiceUtils.setDayToMaximum(dates.second);
                 return Select.from(Session.class)
                         .where(Condition.prop("start_date")

@@ -89,8 +89,8 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     private void subscribeOnMonthSummariesUpdate() {
-        Calendar from = Calendar.getInstance();
-        Calendar to = Calendar.getInstance();
+        Calendar from = Calendar.getInstance(Locale.getDefault());
+        Calendar to = Calendar.getInstance(Locale.getDefault());
         setMonthFirstDay(from);
         setDayOnStart(from);
 
@@ -117,8 +117,8 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     private void subscribeOnYearSummariesUpdate() {
-        Calendar from = Calendar.getInstance();
-        Calendar to = Calendar.getInstance();
+        Calendar from = Calendar.getInstance(Locale.getDefault());
+        Calendar to = Calendar.getInstance(Locale.getDefault());
         setYearFirstDay(from);
         setDayOnStart(from);
 
@@ -162,7 +162,7 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     private void setWeekFirstDay(Calendar calendar) {
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
     }
 
     private void setMonthFirstDay(Calendar calendar) {

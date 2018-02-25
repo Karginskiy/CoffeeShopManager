@@ -153,12 +153,12 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
-        Calendar dateFrom = Calendar.getInstance();
+        Calendar dateFrom = Calendar.getInstance(Locale.getDefault());
         dateFrom.set(year, monthOfYear, dayOfMonth);
         setDatesToPreferences(dateFrom, DATE_FROM);
         this.dateFrom.setText(standardFormat.format(dateFrom.getTime()));
 
-        Calendar dateTo = Calendar.getInstance();
+        Calendar dateTo = Calendar.getInstance(Locale.getDefault());
         dateTo.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
         setDatesToPreferences(dateTo, DATE_TO);
         this.dateTo.setText(standardFormat.format(dateTo.getTime()));
@@ -179,7 +179,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     private Calendar getDateFrom(SharedPreferences sharedPreferences) {
         long dateFrom = sharedPreferences.getLong(DATE_FROM, new Date().getTime());
 
-        Calendar calendarFrom = Calendar.getInstance();
+        Calendar calendarFrom = Calendar.getInstance(Locale.getDefault());
         calendarFrom.setTimeInMillis(dateFrom);
         return calendarFrom;
     }
@@ -187,7 +187,7 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     private Calendar getDateTo(SharedPreferences sharedPreferences) {
         long dateTo = sharedPreferences.getLong(DATE_TO, new Date().getTime());
 
-        Calendar calendarTo = Calendar.getInstance();
+        Calendar calendarTo = Calendar.getInstance(Locale.getDefault());
         calendarTo.setTimeInMillis(dateTo);
         return calendarTo;
     }

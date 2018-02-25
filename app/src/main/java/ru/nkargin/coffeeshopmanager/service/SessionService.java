@@ -109,7 +109,6 @@ public class SessionService {
         currentSession.setEndDate(new Date());
         currentSession.save();
 
-        OrderService.INSTANCE.dispose();
         removeSessionIfNoOperability();
     }
 
