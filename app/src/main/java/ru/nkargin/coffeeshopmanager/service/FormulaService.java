@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ru.nkargin.coffeeshopmanager.model.FormulaParam;
+import ru.nkargin.coffeeshopmanager.model.Session;
 
 public class FormulaService {
 
@@ -29,6 +30,12 @@ public class FormulaService {
         formulaParam.setValue(integer);
 
         formulaParam.save();
+
+        Session currentSession = SessionService.getInstance().getCurrentSession();
+        if (currentSession != null) {
+            currentSession.setTax(integer);
+            currentSession.save();
+        }
     }
 
     public void setPaymentParam(Integer integer) {
@@ -36,6 +43,12 @@ public class FormulaService {
         formulaParam.setValue(integer);
 
         formulaParam.save();
+
+        Session currentSession = SessionService.getInstance().getCurrentSession();
+        if (currentSession != null) {
+            currentSession.setPayment(integer);
+            currentSession.save();
+        }
     }
 
     public int getTax() {
