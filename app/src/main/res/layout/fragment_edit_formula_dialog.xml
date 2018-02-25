@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:text="@{model.payment}"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned" />
         </TableRow>
 
         <TableRow
