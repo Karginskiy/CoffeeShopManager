@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -162,7 +163,7 @@ public class StatisticsForRecentPeriodFragment extends Fragment {
     }
 
     private void setWeekFirstDay(Calendar calendar) {
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
     }
 
     private void setMonthFirstDay(Calendar calendar) {
