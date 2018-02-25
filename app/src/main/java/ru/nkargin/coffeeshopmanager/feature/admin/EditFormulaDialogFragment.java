@@ -68,18 +68,12 @@ public class EditFormulaDialogFragment extends DialogFragment {
         String s = binding.editPayment.getText().toString();
         int payment = Integer.parseInt(s);
         FormulaService.getInstance().setPaymentParam(payment);
-
-        SessionService.getInstance().getCurrentSession().setPayment(payment);
-        SessionService.getInstance().getCurrentSession().save();
     }
 
     private void updateTax() {
         String s1 = binding.editTax.getText().toString();
         int tax = Integer.parseInt(s1);
         FormulaService.getInstance().setTaxParam(tax);
-
-        SessionService.getInstance().getCurrentSession().setTax(tax);
-        SessionService.getInstance().getCurrentSession().save();
     }
 
     private void initViewSubscription() {

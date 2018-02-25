@@ -29,6 +29,9 @@ public class FormulaService {
         formulaParam.setValue(integer);
 
         formulaParam.save();
+
+        SessionService.getInstance().getCurrentSession().setTax(integer);
+        SessionService.getInstance().getCurrentSession().save();
     }
 
     public void setPaymentParam(Integer integer) {
@@ -36,6 +39,9 @@ public class FormulaService {
         formulaParam.setValue(integer);
 
         formulaParam.save();
+
+        SessionService.getInstance().getCurrentSession().setPayment(integer);
+        SessionService.getInstance().getCurrentSession().save();
     }
 
     public int getTax() {
