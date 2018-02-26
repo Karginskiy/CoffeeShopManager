@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
@@ -74,17 +75,28 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
 
     private void initDateFields(View inflate) {
         dateFrom = inflate.findViewById(R.id.date_from);
-        dateFrom.setOnClickListener(getDateFromToClickListener());
+        dateFrom.setOnClickListener(getDateFromClickListener());
+
         dateTo = inflate.findViewById(R.id.date_to);
-        dateTo.setOnClickListener(getDateFromToClickListener());
+        dateTo.setOnClickListener(getDateToClickListener());
     }
 
     @NonNull
-    private View.OnClickListener getDateFromToClickListener() {
+    private View.OnClickListener getDateFromClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDatePickerDialog();
+                showSeparateDatepickerDialog(DATE_FROM, dateFrom);
+            }
+        };
+    }
+
+    @NonNull
+    private View.OnClickListener getDateToClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSeparateDatepickerDialog(DATE_TO, dateTo);
             }
         };
     }
@@ -144,7 +156,40 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
 
     @NonNull
     private View.OnClickListener addOnChooseDatesClickButton() {
-        return getDateFromToClickListener();
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog();
+            }
+        };
+    }
+
+    private void showSeparateDatepickerDialog(String fieldName, EditText dateField) {
+        Calendar dateFromPreferences = getDateFromPreferences(fieldName);
+        android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(getContext(),
+                R.style.datepicker,
+                getOnDateSetSeparatePicker(fieldName, dateField),
+                dateFromPreferences.get(Calendar.YEAR),
+                dateFromPreferences.get(Calendar.MONTH),
+                dateFromPreferences.get(Calendar.DATE)
+        );
+
+        datePickerDialog.show();
+    }
+
+    @NonNull
+    private android.app.DatePickerDialog.OnDateSetListener getOnDateSetSeparatePicker(final String fieldName, final EditText dateField) {
+        return new android.app.DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfYear) {
+                Calendar dateFrom = Calendar.getInstance(Locale.getDefault());
+                dateFrom.set(year, monthOfYear, dayOfYear);
+                setDatesToPreferences(dateFrom, fieldName);
+
+                dateField.setText(standardFormat.format(dateFrom.getTime()));
+                resubscribeOnPeriodStatistics(getDatesFromPreferences());
+            }
+        };
     }
 
     private void showDatePickerDialog() {
@@ -167,29 +212,20 @@ public class StatisticsForPeriodFragment extends Fragment implements DatePickerD
     }
 
     private Pair<Calendar, Calendar> getDatesFromPreferences() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(STATISTICS, Context.MODE_PRIVATE);
-
-        Calendar calendarFrom = getDateFrom(sharedPreferences);
-        Calendar calendarTo = getDateTo(sharedPreferences);
+        Calendar calendarFrom = getDateFromPreferences(DATE_FROM);
+        Calendar calendarTo = getDateFromPreferences(DATE_TO);
 
         return Pair.create(calendarFrom, calendarTo);
     }
 
     @NonNull
-    private Calendar getDateFrom(SharedPreferences sharedPreferences) {
-        long dateFrom = sharedPreferences.getLong(DATE_FROM, new Date().getTime());
+    private Calendar getDateFromPreferences(String fieldName) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(STATISTICS, Context.MODE_PRIVATE);
+        long dateFrom = sharedPreferences.getLong(fieldName, new Date().getTime());
 
         Calendar calendarFrom = Calendar.getInstance(Locale.getDefault());
         calendarFrom.setTimeInMillis(dateFrom);
         return calendarFrom;
-    }
-
-    private Calendar getDateTo(SharedPreferences sharedPreferences) {
-        long dateTo = sharedPreferences.getLong(DATE_TO, new Date().getTime());
-
-        Calendar calendarTo = Calendar.getInstance(Locale.getDefault());
-        calendarTo.setTimeInMillis(dateTo);
-        return calendarTo;
     }
 
     private void setDatesToPreferences(Calendar calendar, String name) {
